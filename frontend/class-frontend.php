@@ -54,16 +54,26 @@ class Frontend {
 
 		// Base English defaults.
 		$i18n_base = array(
-			'selectCategory' => __( 'Please select a treatment category to continue.', 'appointment-booking-system' ),
-			'selectDoctor'   => __( 'Please select a doctor to continue.', 'appointment-booking-system' ),
-			'selectService'  => __( 'Please select at least one service to continue.', 'appointment-booking-system' ),
-			'selectDate'     => __( 'Please choose an appointment date to continue.', 'appointment-booking-system' ),
-			'selectTime'     => __( 'Please choose an appointment time to continue.', 'appointment-booking-system' ),
-			'requiredField'  => __( 'This field is required.', 'appointment-booking-system' ),
-			'invalidEmail'   => __( 'Please enter a valid email address.', 'appointment-booking-system' ),
-			'invalidPhone'   => __( 'Please enter a valid phone number.', 'appointment-booking-system' ),
-			'genericError'   => __( 'Something went wrong. Please try again.', 'appointment-booking-system' ),
-			'noSlots'        => __( 'No time slots available on this date.', 'appointment-booking-system' ),
+			'selectCategory'        => __( 'Please select a treatment category to continue.', 'appointment-booking-system' ),
+			'selectDoctor'          => __( 'Please select a doctor to continue.', 'appointment-booking-system' ),
+			'selectService'         => __( 'Please select at least one service to continue.', 'appointment-booking-system' ),
+			'selectDate'            => __( 'Please choose an appointment date to continue.', 'appointment-booking-system' ),
+			'selectTime'            => __( 'Please choose an appointment time to continue.', 'appointment-booking-system' ),
+			'requiredField'         => __( 'This field is required.', 'appointment-booking-system' ),
+			'invalidEmail'          => __( 'Please enter a valid email address.', 'appointment-booking-system' ),
+			'invalidPhone'          => __( 'Please enter a valid phone number.', 'appointment-booking-system' ),
+			'genericError'          => __( 'Something went wrong. Please try again.', 'appointment-booking-system' ),
+			'noSlots'               => __( 'No time slots available on this date.', 'appointment-booking-system' ),
+			'review_treatment'      => __( 'Treatment', 'appointment-booking-system' ),
+			'review_doctor'         => __( 'Doctor', 'appointment-booking-system' ),
+			'review_services'       => __( 'Services', 'appointment-booking-system' ),
+			'review_date'           => __( 'Appointment Date', 'appointment-booking-system' ),
+			'review_time'           => __( 'Appointment Time', 'appointment-booking-system' ),
+			'review_total_duration' => __( 'Total Duration', 'appointment-booking-system' ),
+			'review_patient_name'   => __( 'Patient Name', 'appointment-booking-system' ),
+			'review_email'          => __( 'Email', 'appointment-booking-system' ),
+			'review_phone'          => __( 'Phone', 'appointment-booking-system' ),
+			'submitting'            => __( 'Submitting…', 'appointment-booking-system' ),
 		);
 
 		// Merge: language-specific values override English defaults.

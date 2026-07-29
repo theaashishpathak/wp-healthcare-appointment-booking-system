@@ -69,8 +69,7 @@ class Translation_Service {
 	public static function get_languages() {
 
 		if ( ! self::is_wpml_active() ) {
-
-			return array(
+			$languages = array(
 				'en' => array(
 					'code'           => 'en',
 					'display_name'   => 'English',
@@ -80,6 +79,45 @@ class Translation_Service {
 				),
 			);
 
+			// Detect current WordPress site locale (e.g. pt_PT, de_DE, es_ES, it_IT, fr_FR)
+			$site_locale = get_locale();
+			if ( ! empty( $site_locale ) ) {
+				$lang_code = strtolower( substr( $site_locale, 0, 2 ) );
+				if ( 'en' !== $lang_code && empty( $languages[ $lang_code ] ) ) {
+					require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+					$translations = wp_get_available_translations();
+					$name = ! empty( $translations[ $site_locale ]['native_name'] ) ? $translations[ $site_locale ]['native_name'] : strtoupper( $lang_code );
+					$languages[ $lang_code ] = array(
+						'code'           => $lang_code,
+						'display_name'   => $name,
+						'native_name'    => $name,
+						'default_locale' => $site_locale,
+						'is_default'     => false,
+					);
+				}
+			}
+
+			// Include any extra installed WordPress site languages
+			$avail_locales = get_available_languages();
+			if ( is_array( $avail_locales ) ) {
+				require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+				$translations = wp_get_available_translations();
+				foreach ( $avail_locales as $loc ) {
+					$c = strtolower( substr( $loc, 0, 2 ) );
+					if ( ! empty( $c ) && empty( $languages[ $c ] ) ) {
+						$n = ! empty( $translations[ $loc ]['native_name'] ) ? $translations[ $loc ]['native_name'] : strtoupper( $c );
+						$languages[ $c ] = array(
+							'code'           => $c,
+							'display_name'   => $n,
+							'native_name'    => $n,
+							'default_locale' => $loc,
+							'is_default'     => false,
+						);
+					}
+				}
+			}
+
+			return $languages;
 		}
 
 		$languages = apply_filters(

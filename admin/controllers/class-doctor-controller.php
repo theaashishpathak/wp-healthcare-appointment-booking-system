@@ -63,8 +63,10 @@ class Doctor_Controller {
 
 		if ( $id ) {
 			$model->update( $id, $data );
+			\AB\Includes\Logger::log( 'doctor', 'updated', 'Updated doctor "' . $name . '"', $data );
 		} else {
 			$id = $model->insert( $data );
+			\AB\Includes\Logger::log( 'doctor', 'created', 'Added new doctor "' . $name . '"', array_merge( array( 'id' => $id ), $data ) );
 		}
 
 		$model->sync_categories( $id, $category_ids );
@@ -76,7 +78,10 @@ class Doctor_Controller {
 		Security::verify_admin_request( '_wpnonce', false );
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( $id ) {
+			$doc = ( new Doctor_Model() )->find( $id );
+			$doc_name = $doc ? $doc['name'] : '#' . $id;
 			( new Doctor_Model() )->delete( $id );
+			\AB\Includes\Logger::log( 'doctor', 'deleted', 'Deleted doctor "' . $doc_name . '" (ID: ' . $id . ')' );
 		}
 		$this->redirect_with_message( 'success', __( 'Doctor deleted.', 'appointment-booking-system' ) );
 	}

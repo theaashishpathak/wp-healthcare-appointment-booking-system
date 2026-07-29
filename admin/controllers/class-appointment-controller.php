@@ -24,7 +24,10 @@ class Appointment_Controller {
 
 		$allowed = array_keys( ab_get_status_labels() );
 		if ( $id && in_array( $status, $allowed, true ) ) {
+			$app = ( new Appointment_Model() )->find( $id );
 			( new Appointment_Model() )->update( $id, array( 'status' => $status ) );
+			$b_id = $app ? $app['booking_id'] : '#' . $id;
+			\AB\Includes\Logger::log( 'appointment', 'updated', 'Updated appointment ' . $b_id . ' status to [' . strtoupper( $status ) . ']', array( 'id' => $id, 'status' => $status ) );
 		}
 
 		$this->redirect_with_message( 'success', __( 'Appointment status updated.', 'appointment-booking-system' ) );
@@ -34,7 +37,10 @@ class Appointment_Controller {
 		Security::verify_admin_request( '_wpnonce', false );
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( $id ) {
+			$app = ( new Appointment_Model() )->find( $id );
+			$b_id = $app ? $app['booking_id'] : '#' . $id;
 			( new Appointment_Model() )->delete( $id );
+			\AB\Includes\Logger::log( 'appointment', 'deleted', 'Deleted appointment ' . $b_id );
 		}
 		$this->redirect_with_message( 'success', __( 'Appointment deleted.', 'appointment-booking-system' ) );
 	}

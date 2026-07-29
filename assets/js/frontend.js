@@ -398,16 +398,18 @@
 			var mins  = state.totalMinutes % 60;
 			var durationLabel = ( hours ? hours + 'h ' : '' ) + mins + 'm';
 
+			var i18n = AB_FRONTEND.i18n || {};
+
 			var rows = [
-				[ 'Treatment', state.category.name ],
-				[ 'Doctor', state.doctor.name ],
-				[ 'Services', serviceNames ],
-				[ 'Appointment Date', state.date ],
-				[ 'Appointment Time', state.time.label ],
-				[ 'Total Duration', durationLabel ],
-				[ 'Patient Name', firstName + ' ' + lastName ],
-				[ 'Email', email ],
-				[ 'Phone', phone ],
+				[ i18n.review_treatment || 'Treatment', state.category.name ],
+				[ i18n.review_doctor || 'Doctor', state.doctor.name ],
+				[ i18n.review_services || 'Services', serviceNames ],
+				[ i18n.review_date || 'Appointment Date', state.date ],
+				[ i18n.review_time || 'Appointment Time', state.time.label ],
+				[ i18n.review_total_duration || 'Total Duration', durationLabel ],
+				[ i18n.review_patient_name || 'Patient Name', firstName + ' ' + lastName ],
+				[ i18n.review_email || 'Email', email ],
+				[ i18n.review_phone || 'Phone', phone ],
 			];
 
 			card.innerHTML = rows.map( function ( r ) {
@@ -424,7 +426,7 @@
 			var submitBtn = form.querySelector( '.ab-btn-submit' );
 			submitBtn.disabled = true;
 			var originalText = submitBtn.textContent;
-			submitBtn.textContent = 'Submitting…';
+			submitBtn.textContent = ( AB_FRONTEND.i18n && AB_FRONTEND.i18n.submitting ) || 'Submitting…';
 
 			var payload = {
 				category_id: state.category.id,

@@ -6,10 +6,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 use AB\Includes\Models\Appointment_Model;
 use AB\Includes\Models\Doctor_Model;
 use AB\Includes\Models\Category_Model;
+use AB\Includes\Language\Translation_Service;
 
 $appointment_model = new Appointment_Model();
 $doctor_model       = new Doctor_Model();
 $category_model     = new Category_Model();
+
+// Load language-specific strings for active WP / WPML language
+$_cur_lang  = Translation_Service::get_current_language();
+$_lang_strs = Translation_Service::get_i18n_strings( $_cur_lang );
+$t          = function( $key, $fallback ) use ( $_lang_strs ) {
+	return ! empty( $_lang_strs[ $key ] ) ? $_lang_strs[ $key ] : $fallback;
+};
 
 $doctors    = $doctor_model->all();
 $categories = $category_model->all();
@@ -35,50 +43,52 @@ $status_labels = ab_get_status_labels();
 ?>
 <div class="wrap ab-wrap">
 	<h1>
-		<?php esc_html_e( 'Appointments', 'appointment-booking-system' ); ?>
-		<a class="page-title-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array_merge( $args, array( 'action' => 'ab_export_appointments' ) ), admin_url( 'admin-post.php' ) ), 'ab_admin_nonce' ) ); ?>"><?php esc_html_e( 'Export CSV', 'appointment-booking-system' ); ?></a>
+		<?php echo esc_html( $t( 'app_page_title', __( 'Appointments', 'appointment-booking-system' ) ) ); ?>
+		<a class="page-title-action" href="<?php echo esc_url( wp_nonce_url( add_query_arg( array_merge( $args, array( 'action' => 'ab_export_appointments' ) ), admin_url( 'admin-post.php' ) ), 'ab_admin_nonce' ) ); ?>"><?php echo esc_html( $t( 'app_btn_export_csv', __( 'Export CSV', 'appointment-booking-system' ) ) ); ?></a>
 	</h1>
 	<?php include __DIR__ . '/partials/notice.php'; ?>
 
 	<form method="get" class="ab-filter-bar">
 		<input type="hidden" name="page" value="ab-appointments" />
-		<input type="search" name="s" placeholder="<?php esc_attr_e( 'Search name, phone, email, booking ID…', 'appointment-booking-system' ); ?>" value="<?php echo esc_attr( $args['search'] ); ?>" />
+		<input type="search" name="s" placeholder="<?php echo esc_attr( $t( 'app_search_ph', __( 'Search name, phone, email, booking ID…', 'appointment-booking-system' ) ) ); ?>" value="<?php echo esc_attr( $args['search'] ); ?>" />
 		<select name="doctor_id">
-			<option value=""><?php esc_html_e( 'All Doctors', 'appointment-booking-system' ); ?></option>
+			<option value=""><?php echo esc_html( $t( 'all_doctors', __( 'All Doctors', 'appointment-booking-system' ) ) ); ?></option>
 			<?php foreach ( $doctors as $doc ) : ?>
 				<option value="<?php echo esc_attr( $doc['id'] ); ?>" <?php selected( $args['doctor_id'], $doc['id'] ); ?>><?php echo esc_html( $doc['name'] ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<select name="category_id">
-			<option value=""><?php esc_html_e( 'All Categories', 'appointment-booking-system' ); ?></option>
+			<option value=""><?php echo esc_html( $t( 'all_categories', __( 'All Categories', 'appointment-booking-system' ) ) ); ?></option>
 			<?php foreach ( $categories as $cat ) : ?>
 				<option value="<?php echo esc_attr( $cat['id'] ); ?>" <?php selected( $args['category_id'], $cat['id'] ); ?>><?php echo esc_html( $cat['name'] ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<select name="status">
-			<option value=""><?php esc_html_e( 'All Statuses', 'appointment-booking-system' ); ?></option>
+			<option value=""><?php echo esc_html( $t( 'all_statuses', __( 'All Statuses', 'appointment-booking-system' ) ) ); ?></option>
 			<?php foreach ( $status_labels as $key => $label ) : ?>
 				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $args['status'], $key ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<input type="date" name="date" value="<?php echo esc_attr( $args['date'] ); ?>" />
-		<button class="button"><?php esc_html_e( 'Filter', 'appointment-booking-system' ); ?></button>
-		<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ab-appointments' ) ); ?>"><?php esc_html_e( 'Reset', 'appointment-booking-system' ); ?></a>
+		<button class="button"><?php echo esc_html( $t( 'btn_filter', __( 'Filter', 'appointment-booking-system' ) ) ); ?></button>
+		<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=ab-appointments' ) ); ?>"><?php echo esc_html( $t( 'btn_reset', __( 'Reset', 'appointment-booking-system' ) ) ); ?></a>
 	</form>
 
 	<table class="widefat striped">
-		<thead><tr>
-			<th><?php esc_html_e( 'Booking ID', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Patient', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Phone', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Email', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Category', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Doctor', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Date', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Time', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Status', 'appointment-booking-system' ); ?></th>
-			<th><?php esc_html_e( 'Actions', 'appointment-booking-system' ); ?></th>
-		</tr></thead>
+		<thead>
+			<tr>
+				<th><?php echo esc_html( $t( 'dash_booking_id', __( 'Booking ID', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'dash_patient', __( 'Patient', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'col_phone', __( 'Phone', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'col_email', __( 'Email', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'col_category', __( 'Category', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'dash_doctor', __( 'Doctor', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'dash_date', __( 'Date', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'dash_time', __( 'Time', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'dash_status', __( 'Status', 'appointment-booking-system' ) ) ); ?></th>
+				<th><?php echo esc_html( $t( 'col_actions', __( 'Actions', 'appointment-booking-system' ) ) ); ?></th>
+			</tr>
+		</thead>
 		<tbody>
 		<?php if ( $result['items'] ) : ?>
 			<?php foreach ( $result['items'] as $row ) : ?>
@@ -104,12 +114,12 @@ $status_labels = ab_get_status_labels();
 								<?php endforeach; ?>
 							</select>
 						</form>
-						<a class="ab-delete-link" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ab_delete_appointment&id=' . $row['id'] ), 'ab_admin_nonce' ) ); ?>"><?php esc_html_e( 'Delete', 'appointment-booking-system' ); ?></a>
+						<a class="ab-delete-link" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ab_delete_appointment&id=' . $row['id'] ), 'ab_admin_nonce' ) ); ?>"><?php echo esc_html( $t( 'btn_delete', __( 'Delete', 'appointment-booking-system' ) ) ); ?></a>
 					</td>
 				</tr>
 			<?php endforeach; ?>
 		<?php else : ?>
-			<tr><td colspan="10"><?php esc_html_e( 'No appointments found.', 'appointment-booking-system' ); ?></td></tr>
+			<tr><td colspan="10"><?php echo esc_html( $t( 'app_no_appointments', __( 'No appointments found.', 'appointment-booking-system' ) ) ); ?></td></tr>
 		<?php endif; ?>
 		</tbody>
 	</table>

@@ -56,8 +56,10 @@ class Service_Controller {
 
 		if ( $id ) {
 			$model->update( $id, $data );
+			\AB\Includes\Logger::log( 'service', 'updated', 'Updated service "' . $name . '"', $data );
 		} else {
-			$model->insert( $data );
+			$new_id = $model->insert( $data );
+			\AB\Includes\Logger::log( 'service', 'created', 'Created service "' . $name . '"', array_merge( array( 'id' => $new_id ), $data ) );
 		}
 
 		$this->redirect_with_message( 'success', __( 'Service saved successfully.', 'appointment-booking-system' ) );
@@ -67,7 +69,10 @@ class Service_Controller {
 		Security::verify_admin_request( '_wpnonce', false );
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( $id ) {
+			$srv = ( new Service_Model() )->find( $id );
+			$srv_name = $srv ? $srv['name'] : '#' . $id;
 			( new Service_Model() )->delete( $id );
+			\AB\Includes\Logger::log( 'service', 'deleted', 'Deleted service "' . $srv_name . '" (ID: ' . $id . ')' );
 		}
 		$this->redirect_with_message( 'success', __( 'Service deleted.', 'appointment-booking-system' ) );
 	}

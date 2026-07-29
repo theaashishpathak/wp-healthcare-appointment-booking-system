@@ -396,24 +396,34 @@ class Frontend_Ajax {
 		$category = ( new Category_Model() )->find( $category_id );
 		$appointment = $appointment_model->find( $appointment_id );
 
+		$current_lang = Translation_Service::get_current_language();
+
+		// Log appointment creation
+		\AB\Includes\Logger::log(
+			'appointment',
+			'created',
+			'New appointment booked: ' . $booking_id . ' by ' . trim( $first_name . ' ' . $last_name ),
+			array(
+				'booking_id'   => $booking_id,
+				'patient_name' => trim( $first_name . ' ' . $last_name ),
+				'email'        => $email,
+				'date'         => $date,
+				'time'         => $time,
+			)
+		);
+
 		// Email failures must never break the booking confirmation for the patient.
 		try {
-
-    Email::send_booking_emails(
-        $appointment,
-        $services,
-        $doctor,
-        $category
-    );
-
-} catch ( \Throwable $e ) {
-
-    error_log('EMAIL ERROR');
-    error_log($e->getMessage());
-    error_log($e->getFile());
-    error_log($e->getLine());
-
-}
+			Email::send_booking_emails(
+				$appointment,
+				$services,
+				$doctor,
+				$category,
+				$current_lang
+			);
+		} catch ( \Throwable $e ) {
+			error_log( 'EMAIL ERROR: ' . $e->getMessage() );
+		}
 
 		wp_send_json_success(
 			array(

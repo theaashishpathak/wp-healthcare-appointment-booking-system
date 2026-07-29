@@ -53,9 +53,11 @@ class Category_Controller {
 
 		if ( $id ) {
 			$model->update( $id, $data );
+			\AB\Includes\Logger::log( 'category', 'updated', 'Updated category "' . $name . '"', $data );
 			$this->redirect_with_message( 'success', __( 'Category updated successfully.', 'appointment-booking-system' ) );
 		} else {
-			$model->insert( $data );
+			$new_id = $model->insert( $data );
+			\AB\Includes\Logger::log( 'category', 'created', 'Created category "' . $name . '"', array_merge( array( 'id' => $new_id ), $data ) );
 			$this->redirect_with_message( 'success', __( 'Category created successfully.', 'appointment-booking-system' ) );
 		}
 	}
@@ -64,7 +66,10 @@ class Category_Controller {
 		Security::verify_admin_request( '_wpnonce', false );
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( $id ) {
+			$cat = ( new Category_Model() )->find( $id );
+			$cat_name = $cat ? $cat['name'] : '#' . $id;
 			( new Category_Model() )->delete( $id );
+			\AB\Includes\Logger::log( 'category', 'deleted', 'Deleted category "' . $cat_name . '" (ID: ' . $id . ')' );
 		}
 		$this->redirect_with_message( 'success', __( 'Category deleted.', 'appointment-booking-system' ) );
 	}

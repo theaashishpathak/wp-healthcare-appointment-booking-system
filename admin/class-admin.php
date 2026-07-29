@@ -9,6 +9,7 @@ use AB\Admin\Controllers\Availability_Controller;
 use AB\Admin\Controllers\Appointment_Controller;
 use AB\Admin\Controllers\Settings_Controller;
 use AB\Admin\Controllers\String_Translation_Controller;
+use AB\Admin\Controllers\Activity_Log_Controller;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,6 +34,7 @@ class Admin {
 		new Appointment_Controller();
 		new Settings_Controller();
 		new String_Translation_Controller();
+		new Activity_Log_Controller();
 	}
 
 	public function register_menu() {
@@ -56,6 +58,7 @@ class Admin {
 		add_submenu_page( 'ab-dashboard', __( 'Appointments', 'appointment-booking-system' ), __( 'Appointments', 'appointment-booking-system' ), $cap, 'ab-appointments', array( $this, 'render_appointments' ) );
 		add_submenu_page( 'ab-dashboard', __( 'Settings', 'appointment-booking-system' ), __( 'Settings', 'appointment-booking-system' ), $cap, 'ab-settings', array( $this, 'render_settings' ) );
 		add_submenu_page( 'ab-dashboard', __( 'String Translations', 'appointment-booking-system' ), __( 'String Translations', 'appointment-booking-system' ), $cap, 'ab-string-translations', array( $this, 'render_string_translations' ) );
+		add_submenu_page( 'ab-dashboard', __( 'Activity Logs', 'appointment-booking-system' ), __( 'Activity Logs', 'appointment-booking-system' ), $cap, 'ab-activity-logs', array( $this, 'render_activity_logs' ) );
 		add_submenu_page( 'ab-dashboard', __( 'Help', 'appointment-booking-system' ), __( 'Help', 'appointment-booking-system' ), $cap, 'ab-help', array( $this, 'render_help' ) );
 		add_submenu_page( null, __( 'Manage Translation', 'appointment-booking-system' ), __( 'Manage Translation', 'appointment-booking-system' ), $cap, 'ab-translation', array( $this, 'render_translation' ) );
 	}
@@ -138,6 +141,9 @@ class Admin {
 	}
 	public function render_string_translations() {
 		$this->view( 'string-translations' );
+	}
+	public function render_activity_logs() {
+		$this->view( 'activity-logs' );
 	}
 }
 

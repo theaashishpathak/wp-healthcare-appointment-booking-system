@@ -2,6 +2,7 @@
 namespace AB\Admin\Controllers;
 
 use AB\Includes\Security\Security;
+use AB\Includes\Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,6 +19,8 @@ class Settings_Controller {
 
 		$defaults = ab_get_default_settings();
 		$posted   = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$old_settings = get_option( 'ab_settings', array() );
 
 		$settings = array(
 			'clinic_name'            => sanitize_text_field( $posted['clinic_name'] ?? $defaults['clinic_name'] ),
@@ -41,7 +44,31 @@ class Settings_Controller {
 			'keep_data_on_uninstall' => isset( $posted['keep_data_on_uninstall'] ) ? 1 : 0,
 		);
 
+		// Calculate diff for audit log
+		$diff = array();
+		foreach ( $settings as $k => $v ) {
+			$old_v = $old_settings[ $k ] ?? null;
+			if ( (string) $old_v !== (string) $v ) {
+				$diff[ $k ] = array(
+					'old' => $old_v,
+					'new' => $v,
+				);
+			}
+		}
+
 		update_option( 'ab_settings', $settings );
+
+		// Log settings update event
+		Logger::log(
+			'settings',
+			'updated',
+			'Updated Plugin Settings (' . count( $diff ) . ' change(s))',
+			array(
+				'changes_count'  => count( $diff ),
+				'changes_detail' => $diff,
+				'full_settings'  => $settings,
+			)
+		);
 
 		wp_safe_redirect(
 			add_query_arg(

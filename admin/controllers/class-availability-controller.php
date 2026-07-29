@@ -48,6 +48,7 @@ class Availability_Controller {
 		}
 
 		( new Availability_Model() )->save_for_doctor( $doctor_id, $rows );
+		\AB\Includes\Logger::log( 'availability', 'updated', 'Saved weekly schedule for Doctor ID ' . $doctor_id, array( 'doctor_id' => $doctor_id, 'rows_count' => count( $rows ) ) );
 
 		$this->redirect_with_message( 'success', __( 'Availability saved successfully.', 'appointment-booking-system' ), $doctor_id );
 	}
@@ -79,7 +80,8 @@ class Availability_Controller {
 			$data['end_date']     = $end_date ?: null;
 		}
 
-		( new Holiday_Model() )->insert( $data );
+		$h_id = ( new Holiday_Model() )->insert( $data );
+		\AB\Includes\Logger::log( 'availability', 'created', 'Saved holiday/off-day exception', array_merge( array( 'id' => $h_id ), $data ) );
 
 		$this->redirect_with_message( 'success', __( 'Holiday saved successfully.', 'appointment-booking-system' ), $doctor_id );
 	}
@@ -90,6 +92,7 @@ class Availability_Controller {
 		$doctor_id = isset( $_GET['doctor_id'] ) ? absint( $_GET['doctor_id'] ) : 0;
 		if ( $id ) {
 			( new Holiday_Model() )->delete( $id );
+			\AB\Includes\Logger::log( 'availability', 'deleted', 'Removed holiday exception ID ' . $id );
 		}
 		$this->redirect_with_message( 'success', __( 'Holiday removed.', 'appointment-booking-system' ), $doctor_id );
 	}

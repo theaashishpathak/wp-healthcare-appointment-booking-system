@@ -309,6 +309,9 @@ class Translation_Controller {
 		// Save the mapping
 		Translation_Service::save_translation( $type, $item_id, $translated_id, $lang );
 
+		// Log activity event
+		\AB\Includes\Logger::log( 'translation', 'updated', 'Saved ' . strtoupper( $lang ) . ' translation for ' . ucfirst( $type ) . ' ID ' . $item_id, array( 'type' => $type, 'source_id' => $item_id, 'translated_id' => $translated_id, 'lang' => $lang ) );
+
 		// Update mapping status to completed
 		$wpdb->update(
 			$wpdb->prefix . 'ab_translation_map',

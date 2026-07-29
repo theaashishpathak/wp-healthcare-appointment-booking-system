@@ -3,7 +3,7 @@
  * Plugin Name:       Appointment Booking System
  * Plugin URI:         https://example.com/appointment-booking-system
  * Description:        A complete appointment booking system for healthcare, clinics, hospitals, wellness centres and treatment providers. Multi-step frontend booking wizard + full admin management. Divi compatible.
- * Version:            1.3.31
+ * Version:            1.4.0
  * Requires at least:  6.0
  * Requires PHP:       8.1
  * Author:             Aashish Pathak
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Core plugin constants.
  */
-define( 'AB_VERSION', '1.3.0' );
+define( 'AB_VERSION', '1.4.0' );
 define( 'AB_PLUGIN_FILE', __FILE__ );
 define( 'AB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -81,6 +81,13 @@ function ab_activate_plugin() {
 	}
 
 	flush_rewrite_rules();
+
+	require_once AB_PLUGIN_DIR . 'includes/database/class-db-installer.php';
+	\AB\Includes\Database\DB_Installer::create_tables();
+
+	require_once AB_PLUGIN_DIR . 'includes/class-logger.php';
+	\AB\Includes\Logger::ensure_table_exists();
+	\AB\Includes\Logger::log( 'plugin_lifecycle', 'activated', 'Appointment Booking System plugin activated' );
 }
 register_activation_hook( __FILE__, 'ab_activate_plugin' );
 
@@ -89,8 +96,27 @@ register_activation_hook( __FILE__, 'ab_activate_plugin' );
  */
 function ab_deactivate_plugin() {
 	flush_rewrite_rules();
+
+	require_once AB_PLUGIN_DIR . 'includes/class-logger.php';
+	\AB\Includes\Logger::ensure_table_exists();
+	\AB\Includes\Logger::log( 'plugin_lifecycle', 'deactivated', 'Appointment Booking System plugin deactivated' );
 }
 register_deactivation_hook( __FILE__, 'ab_deactivate_plugin' );
+
+// Log any general plugin activations/deactivations across WordPress
+add_action( 'activated_plugin', function( $plugin ) {
+	require_once AB_PLUGIN_DIR . 'includes/class-logger.php';
+	\AB\Includes\Logger::ensure_table_exists();
+	$plugin_name = plugin_basename( $plugin );
+	\AB\Includes\Logger::log( 'plugin_lifecycle', 'plugin_activated', 'Plugin activated: ' . $plugin_name, array( 'plugin' => $plugin_name ) );
+} );
+
+add_action( 'deactivated_plugin', function( $plugin ) {
+	require_once AB_PLUGIN_DIR . 'includes/class-logger.php';
+	\AB\Includes\Logger::ensure_table_exists();
+	$plugin_name = plugin_basename( $plugin );
+	\AB\Includes\Logger::log( 'plugin_lifecycle', 'plugin_deactivated', 'Plugin deactivated: ' . $plugin_name, array( 'plugin' => $plugin_name ) );
+} );
 /**
  * Register hidden post type for WPML translation bridge.
  * This post type is used internally to bridge custom tables with WPML.
@@ -124,6 +150,17 @@ function ab_run_plugin() {
 	}
 
 	new \AB\Frontend\Frontend();
+
+	// Log user login/logout security events
+	add_action( 'wp_login', function( $user_login, $user ) {
+		\AB\Includes\Logger::log( 'security', 'login', 'User logged in: ' . $user_login, array( 'user_id' => $user->ID, 'email' => $user->user_email, 'role' => ! empty( $user->roles[0] ) ? ucfirst( $user->roles[0] ) : 'User' ) );
+	}, 10, 2 );
+
+	add_action( 'wp_logout', function( $user_id ) {
+		$user = get_userdata( $user_id );
+		$name = $user ? $user->user_login : 'User #' . $user_id;
+		\AB\Includes\Logger::log( 'security', 'logout', 'User logged out: ' . $name, array( 'user_id' => $user_id ) );
+	} );
 }
 add_action( 'plugins_loaded', 'ab_run_plugin' );
 

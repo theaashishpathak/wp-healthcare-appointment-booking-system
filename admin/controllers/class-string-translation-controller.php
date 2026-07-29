@@ -72,6 +72,17 @@ class String_Translation_Controller {
 
 		// Record Audit Log if changes occurred
 		if ( ! empty( $changes_detail ) ) {
+			\AB\Includes\Logger::log(
+				'string_translation',
+				'updated',
+				'Updated static string translations for [' . strtoupper( $lang ) . ']',
+				array(
+					'lang'           => $lang,
+					'changes_count'  => count( $changes_detail ),
+					'changes_detail' => $changes_detail,
+				)
+			);
+
 			$current_user = wp_get_current_user();
 			$logs         = get_option( 'ab_i18n_audit_log', array() );
 			if ( ! is_array( $logs ) ) {

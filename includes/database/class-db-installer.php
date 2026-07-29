@@ -155,11 +155,26 @@ $sql[] = "CREATE TABLE {$prefix}translation_map (
     updated_at DATETIME DEFAULT NULL,
     PRIMARY KEY (id),
     KEY object_type_id (object_type, source_object_id),
-    KEY language_code (language_code),
-    KEY wpml_job_id (wpml_job_id),
     KEY status (status)
 ) {$charset_collate};";
 
+		// Activity logs table - stores system audit logs
+		$sql[] = "CREATE TABLE {$prefix}activity_logs (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			user_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+			user_name VARCHAR(191) NOT NULL,
+			user_email VARCHAR(191) NOT NULL,
+			user_role VARCHAR(50) NULL,
+			action_type VARCHAR(50) NOT NULL,
+			action_name VARCHAR(50) NOT NULL,
+			object_title VARCHAR(255) NOT NULL,
+			details LONGTEXT NULL,
+			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (id),
+			KEY action_type (action_type),
+			KEY user_id (user_id),
+			KEY created_at (created_at)
+		) {$charset_collate};";
 
 		foreach ($sql as $statement) {
 			dbDelta($statement);
