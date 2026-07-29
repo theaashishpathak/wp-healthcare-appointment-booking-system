@@ -36,6 +36,7 @@ $types = array(
 	'service'            => $t( 'srv_page_title', __( 'Services', 'appointment-booking-system' ) ),
 	'availability'       => $t( 'avail_page_title', __( 'Availability', 'appointment-booking-system' ) ),
 	'appointment'        => $t( 'app_page_title', __( 'Appointments / Bookings', 'appointment-booking-system' ) ),
+	'email'              => __( 'Email Notifications & Delivery', 'appointment-booking-system' ),
 	'translation'        => __( 'Item Translations', 'appointment-booking-system' ),
 	'string_translation' => __( 'Static String Translations', 'appointment-booking-system' ),
 	'settings'           => $t( 'set_page_title', __( 'Plugin Settings', 'appointment-booking-system' ) ),
@@ -226,6 +227,8 @@ $types = array(
 							$badge_class = 'ab-badge-lifecycle';
 						} elseif ( 'security' === $log['action_type'] ) {
 							$badge_class = 'ab-badge-security';
+						} elseif ( 'email' === $log['action_type'] ) {
+							$badge_class = 'sent' === $log['action_name'] ? 'ab-badge-security' : 'ab-badge-lifecycle';
 						} elseif ( in_array( $log['action_type'], array( 'settings', 'string_translation', 'translation' ), true ) ) {
 							$badge_class = 'ab-badge-config';
 						}

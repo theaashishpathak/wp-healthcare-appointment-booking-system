@@ -2,6 +2,7 @@
 namespace AB\Includes\Email;
 
 use AB\Includes\Language\Translation_Service;
+use AB\Includes\Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -11,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Builds and sends the customer confirmation and admin notification emails.
  * Uses wp_mail() so it is compatible with any SMTP plugin already configured.
  * Translates template strings according to the selected language.
+ * Logs all email delivery statuses into the Activity Log.
  */
 class Email {
 
@@ -19,7 +21,7 @@ class Email {
 	 * @param array  $services    Service rows attached to the appointment.
 	 * @param array  $doctor      Doctor row.
 	 * @param array  $category    Category row.
-	 * @param string $lang        Language code (e.g. 'de', 'es').
+	 * @string $lang        Language code (e.g. 'de', 'es').
 	 */
 	public static function send_booking_emails( $appointment, $services, $doctor, $category, $lang = '' ) {
 		if ( empty( $lang ) ) {
@@ -119,7 +121,23 @@ class Email {
 		$title_text = $t( 'email_customer_title', __( 'Appointment Submitted Successfully', 'appointment-booking-system' ) );
 		$html       = self::wrap_template( $title_text, $body );
 
-		wp_mail( $appointment['email'], $subject, $html, self::headers() );
+		$recipient = $appointment['email'];
+		$sent      = wp_mail( $recipient, $subject, $html, self::headers() );
+
+		// Log Email Delivery Status
+		Logger::log(
+			'email',
+			$sent ? 'sent' : 'failed',
+			'Customer Email Confirmation (' . $appointment['booking_id'] . ')',
+			array(
+				'recipient'       => $recipient,
+				'recipient_type'  => 'Customer',
+				'booking_id'      => $appointment['booking_id'],
+				'subject'         => $subject,
+				'delivery_status' => $sent ? 'Sent Successfully' : 'Failed / Mailer Rejected',
+				'language'        => $lang,
+			)
+		);
 	}
 
 	protected static function send_admin_email( $appointment, $services, $doctor, $category, $lang = 'en' ) {
@@ -147,9 +165,25 @@ class Email {
 		$body .= '</table>';
 		$body .= '<p style="margin-top:20px;"><a href="' . esc_url( $admin_url ) . '" style="background:' . esc_attr( ab_get_setting( 'primary_color', '#0B6E4F' ) ) . ';color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">' . esc_html( $t( 'email_view_admin', __( 'View in Admin Panel', 'appointment-booking-system' ) ) ) . '</a></p>';
 
-		$title_text = $t( 'email_admin_title', __( 'New Appointment Received', 'appointment-booking-system' ) );
-		$html       = self::wrap_template( $title_text, $body );
+		$title_text  = $t( 'email_admin_title', __( 'New Appointment Received', 'appointment-booking-system' ) );
+		$html        = self::wrap_template( $title_text, $body );
+		$admin_email = ab_get_setting( 'admin_email', get_bloginfo( 'admin_email' ) );
 
-		wp_mail( ab_get_setting( 'admin_email', get_bloginfo( 'admin_email' ) ), $subject, $html, self::headers() );
+		$sent = wp_mail( $admin_email, $subject, $html, self::headers() );
+
+		// Log Email Delivery Status
+		Logger::log(
+			'email',
+			$sent ? 'sent' : 'failed',
+			'Admin Email Notification (' . $appointment['booking_id'] . ')',
+			array(
+				'recipient'       => $admin_email,
+				'recipient_type'  => 'Administrator',
+				'booking_id'      => $appointment['booking_id'],
+				'subject'         => $subject,
+				'delivery_status' => $sent ? 'Sent Successfully' : 'Failed / Mailer Rejected',
+				'language'        => $lang,
+			)
+		);
 	}
 }

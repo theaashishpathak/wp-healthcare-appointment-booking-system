@@ -161,6 +161,22 @@ function ab_run_plugin() {
 		$name = $user ? $user->user_login : 'User #' . $user_id;
 		\AB\Includes\Logger::log( 'security', 'logout', 'User logged out: ' . $name, array( 'user_id' => $user_id ) );
 	} );
+
+	// Log mail failure details
+	add_action( 'wp_mail_failed', function( $wp_error ) {
+		if ( is_wp_error( $wp_error ) ) {
+			\AB\Includes\Logger::log(
+				'email',
+				'failed',
+				'Email Delivery Failed: ' . $wp_error->get_error_message(),
+				array(
+					'error_code'    => $wp_error->get_error_code(),
+					'error_message' => $wp_error->get_error_message(),
+					'error_data'    => $wp_error->get_error_data(),
+				)
+			);
+		}
+	} );
 }
 add_action( 'plugins_loaded', 'ab_run_plugin' );
 
