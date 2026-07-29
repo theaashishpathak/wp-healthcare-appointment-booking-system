@@ -1,0 +1,210 @@
+<?php
+/**
+ * Frontend i18n string map.
+ *
+ * When WPML is active and the current language is not the default,
+ * this map provides translated versions of every static UI string used
+ * in the booking wizard JS (AB_FRONTEND.i18n) and the PHP booking-form
+ * view (step headings, button labels, etc.).
+ *
+ * HOW TO ADD A NEW LANGUAGE:
+ *  1. Add a new key matching the WPML language code (e.g. 'fr', 'ar').
+ *  2. Translate every value in the inner array.
+ *  3. No other file needs changing — the strings are picked up automatically.
+ *
+ * Keys match the AB_FRONTEND.i18n object consumed by frontend.js.
+ * Additional keys (prefixed step_*) are passed to the booking-form.php view
+ * via the $ab_i18n variable so PHP-rendered strings stay in sync.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+return array(
+
+	// ─── Spanish ─────────────────────────────────────────────────────────
+	'es' => array(
+		// JS validation / status messages
+		'selectCategory' => 'Por favor, seleccione una categoría de tratamiento para continuar.',
+		'selectDoctor'   => 'Por favor, seleccione un médico para continuar.',
+		'selectService'  => 'Por favor, seleccione al menos un servicio para continuar.',
+		'selectDate'     => 'Por favor, elija una fecha de cita para continuar.',
+		'selectTime'     => 'Por favor, elija una hora de cita para continuar.',
+		'requiredField'  => 'Este campo es obligatorio.',
+		'invalidEmail'   => 'Por favor, ingrese una dirección de correo electrónico válida.',
+		'invalidPhone'   => 'Por favor, ingrese un número de teléfono válido.',
+		'genericError'   => 'Algo salió mal. Por favor, inténtelo de nuevo.',
+		'noSlots'        => 'No hay horarios disponibles en esta fecha.',
+		// PHP step headings / labels (booking-form.php)
+		'step_category'       => 'Seleccionar categoría de tratamiento',
+		'step_doctor'         => 'Elegir médico',
+		'step_services'       => 'Elegir servicios',
+		'step_date'           => 'Elegir fecha de cita',
+		'step_time'           => 'Elegir hora disponible',
+		'step_details'        => 'Información personal',
+		'step_review'         => 'Revisar cita',
+		'step_done'           => 'Hecho',
+		'label_category'      => 'Categoría',
+		'label_doctor'        => 'Médico',
+		'label_services'      => 'Servicios',
+		'label_date'          => 'Fecha',
+		'label_time'          => 'Hora',
+		'label_details'       => 'Detalles',
+		'label_review'        => 'Revisión',
+		'label_done'          => 'Completado',
+		'btn_back'            => 'Atrás',
+		'btn_next'            => 'Siguiente',
+		'btn_submit'          => 'Confirmar cita',
+		'btn_restart'         => 'Reservar otra cita',
+		'total_duration'      => 'Duración total:',
+		'total_duration_unit' => 'Minutos',
+		'field_first_name'    => 'Nombre',
+		'field_last_name'     => 'Apellido',
+		'field_email'         => 'Correo electrónico',
+		'field_phone'         => 'Número de teléfono',
+		'field_message'       => 'Mensaje (Opcional)',
+		'success_heading'     => 'Cita enviada exitosamente',
+		'success_p1'          => 'Gracias por reservar su cita. Nuestro equipo ha recibido su solicitud.',
+		'success_p2'          => 'Se ha enviado un correo de confirmación a su dirección de correo registrada.',
+		'success_p3'          => 'Nuestro representante se pondrá en contacto con usted si se necesita más información.',
+	),
+
+	// ─── German ──────────────────────────────────────────────────────────
+	'de' => array(
+		// JS validation / status messages
+		'selectCategory' => 'Bitte wählen Sie eine Behandlungskategorie aus, um fortzufahren.',
+		'selectDoctor'   => 'Bitte wählen Sie einen Arzt aus, um fortzufahren.',
+		'selectService'  => 'Bitte wählen Sie mindestens eine Leistung aus, um fortzufahren.',
+		'selectDate'     => 'Bitte wählen Sie ein Termindatum aus, um fortzufahren.',
+		'selectTime'     => 'Bitte wählen Sie eine Terminzeit aus, um fortzufahren.',
+		'requiredField'  => 'Dieses Feld ist erforderlich.',
+		'invalidEmail'   => 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+		'invalidPhone'   => 'Bitte geben Sie eine gültige Telefonnummer ein.',
+		'genericError'   => 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+		'noSlots'        => 'Keine Zeitfenster an diesem Datum verfügbar.',
+		// PHP step headings / labels (booking-form.php)
+		'step_category'       => 'Behandlungskategorie auswählen',
+		'step_doctor'         => 'Arzt wählen',
+		'step_services'       => 'Leistungen wählen',
+		'step_date'           => 'Termindatum wählen',
+		'step_time'           => 'Verfügbare Zeit wählen',
+		'step_details'        => 'Persönliche Informationen',
+		'step_review'         => 'Termin überprüfen',
+		'step_done'           => 'Fertig',
+		'label_category'      => 'Kategorie',
+		'label_doctor'        => 'Arzt',
+		'label_services'      => 'Leistungen',
+		'label_date'          => 'Datum',
+		'label_time'          => 'Uhrzeit',
+		'label_details'       => 'Details',
+		'label_review'        => 'Überprüfung',
+		'label_done'          => 'Abgeschlossen',
+		'btn_back'            => 'Zurück',
+		'btn_next'            => 'Weiter',
+		'btn_submit'          => 'Termin bestätigen',
+		'btn_restart'         => 'Weiteren Termin buchen',
+		'total_duration'      => 'Gesamtdauer:',
+		'total_duration_unit' => 'Minuten',
+		'field_first_name'    => 'Vorname',
+		'field_last_name'     => 'Nachname',
+		'field_email'         => 'E-Mail',
+		'field_phone'         => 'Telefonnummer',
+		'field_message'       => 'Nachricht (Optional)',
+		'success_heading'     => 'Termin erfolgreich eingereicht',
+		'success_p1'          => 'Vielen Dank für Ihre Terminbuchung. Unser Team hat Ihre Anfrage erhalten.',
+		'success_p2'          => 'Eine Bestätigungs-E-Mail wurde an Ihre registrierte E-Mail-Adresse gesendet.',
+		'success_p3'          => 'Unser Mitarbeiter wird Sie kontaktieren, falls weitere Informationen erforderlich sind.',
+	),
+
+	// ─── French ──────────────────────────────────────────────────────────
+	'fr' => array(
+		'selectCategory' => 'Veuillez sélectionner une catégorie de traitement pour continuer.',
+		'selectDoctor'   => 'Veuillez sélectionner un médecin pour continuer.',
+		'selectService'  => 'Veuillez sélectionner au moins un service pour continuer.',
+		'selectDate'     => 'Veuillez choisir une date de rendez-vous pour continuer.',
+		'selectTime'     => 'Veuillez choisir une heure de rendez-vous pour continuer.',
+		'requiredField'  => 'Ce champ est obligatoire.',
+		'invalidEmail'   => 'Veuillez saisir une adresse e-mail valide.',
+		'invalidPhone'   => 'Veuillez saisir un numéro de téléphone valide.',
+		'genericError'   => 'Une erreur s\'est produite. Veuillez réessayer.',
+		'noSlots'        => 'Aucun créneau disponible à cette date.',
+		'step_category'       => 'Sélectionner une catégorie de traitement',
+		'step_doctor'         => 'Choisir un médecin',
+		'step_services'       => 'Choisir des services',
+		'step_date'           => 'Choisir une date de rendez-vous',
+		'step_time'           => 'Choisir une heure disponible',
+		'step_details'        => 'Informations personnelles',
+		'step_review'         => 'Vérifier le rendez-vous',
+		'step_done'           => 'Terminé',
+		'label_category'      => 'Catégorie',
+		'label_doctor'        => 'Médecin',
+		'label_services'      => 'Services',
+		'label_date'          => 'Date',
+		'label_time'          => 'Heure',
+		'label_details'       => 'Détails',
+		'label_review'        => 'Révision',
+		'label_done'          => 'Accompli',
+		'btn_back'            => 'Retour',
+		'btn_next'            => 'Suivant',
+		'btn_submit'          => 'Confirmer le rendez-vous',
+		'btn_restart'         => 'Prendre un autre rendez-vous',
+		'total_duration'      => 'Durée totale :',
+		'total_duration_unit' => 'Minutes',
+		'field_first_name'    => 'Prénom',
+		'field_last_name'     => 'Nom de famille',
+		'field_email'         => 'Adresse e-mail',
+		'field_phone'         => 'Numéro de téléphone',
+		'field_message'       => 'Message (Optionnel)',
+		'success_heading'     => 'Rendez-vous soumis avec succès',
+		'success_p1'          => 'Merci d\'avoir pris rendez-vous. Notre équipe a reçu votre demande.',
+		'success_p2'          => 'Un e-mail de confirmation a été envoyé à votre adresse e-mail enregistrée.',
+		'success_p3'          => 'Notre représentant vous contactera si des informations supplémentaires sont nécessaires.',
+	),
+
+	// ─── Arabic ───────────────────────────────────────────────────────────
+	'ar' => array(
+		'selectCategory' => 'الرجاء اختيار فئة العلاج للمتابعة.',
+		'selectDoctor'   => 'الرجاء اختيار طبيب للمتابعة.',
+		'selectService'  => 'الرجاء اختيار خدمة واحدة على الأقل للمتابعة.',
+		'selectDate'     => 'الرجاء اختيار تاريخ الموعد للمتابعة.',
+		'selectTime'     => 'الرجاء اختيار وقت الموعد للمتابعة.',
+		'requiredField'  => 'هذا الحقل مطلوب.',
+		'invalidEmail'   => 'الرجاء إدخال عنوان بريد إلكتروني صالح.',
+		'invalidPhone'   => 'الرجاء إدخال رقم هاتف صالح.',
+		'genericError'   => 'حدث خطأ ما. الرجاء المحاولة مرة أخرى.',
+		'noSlots'        => 'لا توجد مواعيد متاحة في هذا التاريخ.',
+		'step_category'       => 'اختر فئة العلاج',
+		'step_doctor'         => 'اختر الطبيب',
+		'step_services'       => 'اختر الخدمات',
+		'step_date'           => 'اختر تاريخ الموعد',
+		'step_time'           => 'اختر الوقت المتاح',
+		'step_details'        => 'المعلومات الشخصية',
+		'step_review'         => 'مراجعة الموعد',
+		'step_done'           => 'تم',
+		'label_category'      => 'الفئة',
+		'label_doctor'        => 'الطبيب',
+		'label_services'      => 'الخدمات',
+		'label_date'          => 'التاريخ',
+		'label_time'          => 'الوقت',
+		'label_details'       => 'التفاصيل',
+		'label_review'        => 'المراجعة',
+		'label_done'          => 'مكتمل',
+		'btn_back'            => 'رجوع',
+		'btn_next'            => 'التالي',
+		'btn_submit'          => 'تأكيد الموعد',
+		'btn_restart'         => 'حجز موعد آخر',
+		'total_duration'      => 'المدة الإجمالية:',
+		'total_duration_unit' => 'دقيقة',
+		'field_first_name'    => 'الاسم الأول',
+		'field_last_name'     => 'اسم العائلة',
+		'field_email'         => 'البريد الإلكتروني',
+		'field_phone'         => 'رقم الهاتف',
+		'field_message'       => 'رسالة (اختياري)',
+		'success_heading'     => 'تم إرسال الموعد بنجاح',
+		'success_p1'          => 'شكرًا لحجزك موعدًا. لقد استلم فريقنا طلبك.',
+		'success_p2'          => 'تم إرسال بريد إلكتروني للتأكيد إلى عنوان بريدك الإلكتروني المسجل.',
+		'success_p3'          => 'سيتصل بك ممثلنا إذا كانت هناك حاجة لمزيد من المعلومات.',
+	),
+
+);

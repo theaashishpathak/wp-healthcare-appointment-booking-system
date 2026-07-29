@@ -1,0 +1,125 @@
+.ab-wrap { max-width: 1400px; }
+
+.ab-stat-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 14px;
+	margin: 20px 0;
+}
+@media (max-width: 1100px) {
+	.ab-stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.ab-stat-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #0B6E4F;
+	border-radius: 4px;
+	padding: 16px 18px;
+	display: flex;
+	flex-direction: column;
+}
+.ab-stat-num { font-size: 26px; font-weight: 600; color: #1d2327; }
+.ab-stat-label { color: #646970; font-size: 13px; margin-top: 4px; }
+
+.ab-quick-actions { margin: 10px 0 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+.ab-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 1100px) {
+	.ab-columns { grid-template-columns: 1fr; }
+}
+.ab-col-form { background: #fff; border: 1px solid #dcdcde; padding: 16px 20px; border-radius: 4px; }
+
+.ab-badge {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+.ab-badge-pending   { background: #fef3cd; color: #8a6d0e; }
+.ab-badge-confirmed { background: #d7f5df; color: #146c2e; }
+.ab-badge-cancelled { background: #fbdcdc; color: #9c1c1c; }
+.ab-badge-completed { background: #dbe6ff; color: #1d3f9c; }
+
+.ab-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; }
+
+.ab-filter-bar { margin: 14px 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ab-filter-bar input, .ab-filter-bar select { min-height: 30px; }
+
+.ab-availability-table td, .ab-availability-table th { padding: 8px 10px; }
+.ab-availability-table input[type="time"],
+.ab-availability-table select,
+.ab-availability-table input[type="number"] { width: 100%; }
+
+.ab-delete-link { color: #b32d2e; }
+.ab-inline-form { display: inline-block; margin-right: 6px; }
+.ab-actions-cell { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+
+.ab-pagination { margin-top: 16px; display: flex; gap: 6px; }
+.ab-pagination a { padding: 4px 10px; border: 1px solid #dcdcde; border-radius: 4px; text-decoration: none; }
+.ab-pagination a.current { background: #0B6E4F; color: #fff; border-color: #0B6E4F; }
+
+.ab-help-box { background: #fff; border: 1px solid #dcdcde; padding: 20px 24px; border-radius: 4px; max-width: 800px; }
+.ab-help-box code { background: #f0f0f1; padding: 4px 10px; border-radius: 4px; font-size: 14px; }
+
+/* ── Translation column pill badges ─────────────────────────────── */
+.ab-translation-icons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	align-items: center;
+}
+
+.ab-trans-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	padding: 3px 8px 3px 5px;
+	border-radius: 20px;
+	border: 1.5px solid currentColor;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-decoration: none !important;
+	line-height: 1;
+	transition: opacity 0.15s ease, transform 0.1s ease;
+	white-space: nowrap;
+}
+
+.ab-trans-pill:hover {
+	opacity: 0.82;
+	transform: translateY(-1px);
+}
+
+/* Translated ✓ — green */
+.ab-trans-pill--done {
+	color: #146c2e;
+	background: #d7f5df;
+	border-color: #4caf73;
+}
+.ab-trans-pill--done .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	color: #146c2e;
+}
+
+/* Not yet translated + — blue */
+.ab-trans-pill--missing {
+	color: #0a4b78;
+	background: #e8f4ff;
+	border-color: #4a90d9;
+}
+.ab-trans-pill--missing .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	color: #007cba;
+}
+
+.ab-trans-code {
+	display: inline-block;
+	vertical-align: middle;
+}
+
