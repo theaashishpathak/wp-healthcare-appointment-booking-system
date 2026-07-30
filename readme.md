@@ -24,16 +24,6 @@ Every step of the wizard is deliberately minimal, every submission is re-validat
 
 ---
 
-## 📸 Screenshots
-
-| Admin Dashboard | Activity Logs |
-| :---: | :---: |
-| *Live stats — categories, doctors, services, today's and upcoming appointments — plus quick-add shortcuts.* | *Every action logged with actor, IP, timestamp, and a one-click detail drawer.* |
-
-> Add real screenshots to a `/screenshots` folder in your repo and swap these placeholder rows with `![Dashboard](screenshots/dashboard.png)` etc. before publishing.
-
----
-
 ## ✨ Core System Modules
 
 ### 🧭 8-Step AJAX Booking Wizard
