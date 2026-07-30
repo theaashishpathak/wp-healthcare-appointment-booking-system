@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Appointment Booking System
- * Plugin URI:         https://example.com/appointment-booking-system
+ * Plugin URI:        https://github.com/theaashishpathak/wp-healthcare-appointment-booking-system
  * Description:        A complete appointment booking system for healthcare, clinics, hospitals, wellness centres and treatment providers. Multi-step frontend booking wizard + full admin management. Divi compatible.
  * Version:            1.4.0
  * Requires at least:  6.0
@@ -81,9 +81,6 @@ function ab_activate_plugin() {
 	}
 
 	flush_rewrite_rules();
-
-	require_once AB_PLUGIN_DIR . 'includes/database/class-db-installer.php';
-	\AB\Includes\Database\DB_Installer::create_tables();
 
 	require_once AB_PLUGIN_DIR . 'includes/class-logger.php';
 	\AB\Includes\Logger::ensure_table_exists();

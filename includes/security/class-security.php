@@ -59,6 +59,27 @@ class Security {
 	}
 
 	/**
+	 * Rate limiter helper based on client IP transient counters.
+	 *
+	 * @param string $action         Action identifier (e.g. 'submit_booking').
+	 * @param int    $max_requests   Max allowed requests in window.
+	 * @param int    $period_seconds Window duration in seconds (default 300s = 5m).
+	 * @return bool True if request is allowed, false if limit exceeded.
+	 */
+	public static function check_rate_limit( $action, $max_requests = 5, $period_seconds = 300 ) {
+		$ip       = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '127.0.0.1';
+		$key      = 'ab_rl_' . md5( $action . '_' . $ip );
+		$requests = (int) get_transient( $key );
+
+		if ( $requests >= $max_requests ) {
+			return false;
+		}
+
+		set_transient( $key, $requests + 1, $period_seconds );
+		return true;
+	}
+
+	/**
 	 * Output a standard failure and terminate execution.
 	 *
 	 * @param string $message Message to show.

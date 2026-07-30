@@ -1,129 +1,240 @@
-# Healthcare Appointment Booking System
+<div align="center">
 
-An enterprise-grade, WPML-multilingual, fully audit-logged appointment booking system for WordPress, purpose-built for healthcare clinics, hospitals, medical centers, wellness practices, and multi-doctor facilities.
+# 🏥 Appointment Booking System for WordPress
 
----
+**An enterprise-grade, multilingual, fully audit-logged booking engine built for healthcare — clinics, hospitals, dental practices, wellness centers, and multi-doctor facilities.**
 
-## 🚀 Public Booking Wizard Flow
+![WordPress Version](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg?style=for-the-badge&logo=wordpress)
+![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-777BB4.svg?style=for-the-badge&logo=php)
+![WPML Compatible](https://img.shields.io/badge/WPML-Multilingual_Ready-0073AA.svg?style=for-the-badge)
+![Security Audit](https://img.shields.io/badge/Security-Hardened-00C853.svg?style=for-the-badge)
+![License](https://img.shields.io/badge/License-GPLv2-orange.svg?style=for-the-badge)
 
-The plugin features a modern, responsive, 7-step AJAX booking wizard (`[appointment_booking]`):
+[Why This Plugin](#why-this-plugin) • [Features](#-core-system-modules) • [Screenshots](#-screenshots) • [Installation](#-installation--quick-start) • [Database](#-database-architecture) • [Security](#-security--hardening) • [FAQ](#-faq) • [Roadmap](#-roadmap)
 
-1. **Select Treatment Category**: Choose from active medical specialties (e.g. Cardiology, Dental Care, Orthopedics, General Consultation).
-2. **Choose Doctor**: Select assigned doctor(s) featuring photo, qualifications, years of experience, specialization, and bio.
-3. **Choose Services**: Pick single or multiple services under the selected category with dynamic cumulative duration calculation in minutes.
-4. **Choose Appointment Date**: Interactive date picker that respects doctor weekly working days, single/range holidays, and recurring day exclusions.
-5. **Choose Available Time**: Real-time slot generator dynamically calculating open appointment slots according to doctor start time, end time, break interval, slot duration, and existing confirmed bookings.
-6. **Personal Information**: Patient details collection (First Name, Last Name, Email, Phone Number, Optional Message) with validation and honeypot spam protection.
-7. **Review Appointment**: Comprehensive summary review card displaying all selections, duration, date/time, and patient details before final submission.
-8. **Confirmation & Email Dispatch**: Instant confirmation screen featuring a unique Booking ID (`AB-YYYYMMDD-XXXX`), alongside customer confirmation and admin notification emails.
+</div>
 
 ---
 
-## ✨ Key Features & Enhancements
+## Why This Plugin
 
-### 🌐 WPML Multilingual & Dynamic i18n System
-- **Deep WPML Integration**: Compatible with WPML (`wpml_active_languages`, `wpml_current_language`, `wpml_default_language`).
-- **Multi-Language Baseline Dictionary**: Built-in translation dictionaries for **English (`en`)**, **Spanish (`es`)**, **German (`de`)**, **French (`fr`)**, and **Arabic (`ar`)** with full RTL layout support.
-- **Dynamic Language Detection**: Automatically detects active WordPress site locales (`get_locale()`) and Polylang/WPML languages.
-- **Universal Fallback**: Un-translated languages (e.g. Portuguese `pt`, Italian `it`, Dutch `nl`, Japanese `ja`) seamlessly fall back to English baseline placeholders without breaking UI.
-- **Custom Database Translation Table**: Dedicated `wp_ab_translation_map` for translating doctor bios, service names, and category descriptions.
+Most WordPress booking plugins are built for salons and generic services. This one is purpose-built for healthcare: multi-doctor scheduling, per-doctor availability and holidays, treatment-category organization, and a patient-facing booking flow designed for clarity under stress someone booking a doctor's appointment isn't browsing, they're trying to get seen.
 
-### 🔤 Admin String Translation Suite (`Appointment Booking → String Translations`)
-- **Full Visual Editor**: Manage all static text across Frontend Steps, Buttons, Form Labels, Alert Messages, Email Templates, Doctors, Services, Categories, Availability, Appointments, and Settings.
-- **Real-Time Live Search Filter**: Includes an inline search box (`#ab_string_search`) to filter string keys or labels instantly as you type.
-- **Language Switcher Tabs**: Clean tabbed navigation across all active languages.
-- **Sticky Save Bar**: Floating save bar ensures quick updates without scrolling.
-
-### 🛡️ Executive System Activity & Audit Logs (`Appointment Booking → Activity Logs`)
-- **Dedicated MySQL Audit Table**: All administrative actions and system events are logged to `wp_ab_activity_logs`.
-- **Initiator & Metadata Tracking**: Records User Name, Email, Role, Timestamp, Remote IP Address (`REMOTE_ADDR`), and Browser User Agent (`HTTP_USER_AGENT`).
-- **Side-by-Side Diff Tables**: Expandable inline drawer detailing modified field keys with original vs. updated values highlighted in red/green.
-- **Raw JSON Payload Viewer**: Detailed payload viewer for deep technical auditability.
-- **Tracked Event Types**:
-  - **Doctors**: Creation, updates, multi-category assignment, deletions.
-  - **Services & Categories**: Creation, edits, duration adjustments, deletions.
-  - **Availability & Holidays**: Weekly schedules, break changes, single/range/recurring holiday overrides.
-  - **Appointments**: New bookings, status updates (*Pending*, *Confirmed*, *Completed*, *Cancelled*), deletions.
-  - **Plugin Lifecycle**: Plugin activation, deactivation, and updates across WordPress.
-  - **Security**: User logins, logouts, and administrative setting changes.
-  - **Email Delivery**: Tracking customer and admin email dispatches.
-
-### 📧 Email Delivery & Failure Tracking
-- Logs every customer confirmation and admin notification email attempt.
-- Captures delivery status (`Sent Successfully` or `Failed / Mailer Rejected`), recipient address, subject, booking ID, and active language.
-- Listens to WordPress core `wp_mail_failed` to log exact `WP_Error` codes and diagnostic messages (e.g. SMTP auth failure, port blocks).
-
-### 📅 Advanced Doctor Availability & Holiday Engine
-- Weekly working hours per doctor with custom start time, end time, break start, break end, and slot intervals (15, 20, 30, 45, 60 mins).
-- Flexible holiday overrides: Single Date, Date Range, Weekly Recurring Holidays, or Special Working Days (open on public holidays).
-
-### 📊 Admin Dashboard & Appointments Management
-- **Dashboard**: High-level stat cards, today's schedule, pending bookings, and quick action shortcuts.
-- **Appointments Manager**: Searchable and filterable table by doctor, category, status, date, or patient info.
-- **CSV Export**: One-click CSV export of appointment records.
+Every step of the wizard is deliberately minimal, every submission is re-validated server-side so two patients can never be double-booked into the same slot, and every admin action is logged so when a clinic manager asks "who changed this appointment and when," there's a real answer.
 
 ---
 
-## 🛠️ Installation & Usage
+## 📸 Screenshots
 
-1. Upload the `appointment-booking-system` folder to `/wp-content/plugins/`.
-2. Activate the plugin through **Plugins** in WordPress.
-3. Go to **Appointment Booking → Treatment Categories** and create your first category.
-4. Add **Doctors** and assign them to categories.
-5. Add **Services** under each category.
-6. Configure doctor **Availability** (working hours, breaks, slot interval, holidays).
-7. Place the shortcode on any page, post, or builder module (Divi, Elementor, Gutenberg, Beaver Builder):
+| Admin Dashboard | Activity Logs |
+| :---: | :---: |
+| *Live stats — categories, doctors, services, today's and upcoming appointments — plus quick-add shortcuts.* | *Every action logged with actor, IP, timestamp, and a one-click detail drawer.* |
 
-```
-[appointment_booking]
+> Add real screenshots to a `/screenshots` folder in your repo and swap these placeholder rows with `![Dashboard](screenshots/dashboard.png)` etc. before publishing.
+
+---
+
+## ✨ Core System Modules
+
+### 🧭 8-Step AJAX Booking Wizard
+A responsive, no-reload booking journey that walks patients from specialty to confirmation:
+
+```mermaid
+flowchart LR
+    A["1️⃣ Category<br/>Select Specialty"] --> B["2️⃣ Doctor<br/>Profile & Bio"]
+    B --> C["3️⃣ Services<br/>Multi-Selection"]
+    C --> D["4️⃣ Date<br/>Interactive Cal"]
+    D --> E["5️⃣ Time<br/>Open Slots Only"]
+    E --> F["6️⃣ Details<br/>Patient Form"]
+    F --> G["7️⃣ Review<br/>Summary Check"]
+    G --> H["8️⃣ Done<br/>Booking ID & Mail"]
 ```
 
+| Step | Stage | What happens |
+| :---: | :--- | :--- |
+| **1** | **Category** | Patient picks a specialty — *Cardiology*, *Dental Care*, *Orthopedics*, or any category you define. |
+| **2** | **Doctor** | Browse assigned doctors with photo, qualifications, experience, and bio. |
+| **3** | **Services** | Select one or more services; total duration is calculated live. |
+| **4** | **Date** | An interactive calendar respects each doctor's working days, holidays, and recurring days off. |
+| **5** | **Time** | Slots are generated in real time, excluding breaks, past times, and anything already booked. |
+| **6** | **Patient Info** | Collects name, email, phone, country code, and message — with inline validation. |
+| **7** | **Review** | A summary card shows every selection before the patient commits. |
+| **8** | **Confirmation** | A unique Booking ID (`AB-YYYYMMDD-XXXX`) is issued and a confirmation email is dispatched instantly. |
+
+### 🌐 WPML & Multilingual Support
+- Deep integration with WPML's language filters, so translated content and language switching work the way WordPress users expect.
+- Multilingual admin screens and table columns activate automatically when WPML is present single-language sites stay clean and unaffected.
+- Built-in dictionaries for **English**, **Spanish**, **German**, **French**, and **Arabic**, with full RTL layout support.
+- A dedicated translation table stores translated doctor bios, service names, and category descriptions independently of core WordPress content.
+
+### 🔤 Admin String Translation Suite
+Found under **Appointment Booking → String Translations** a visual editor for every piece of static text in the plugin: step labels, buttons, form copy, alerts, and email templates. A live search box filters strings instantly as you type, and language tabs keep multi-locale editing organized.
+
+### 🛡️ Activity & Audit Logs
+Found under **Appointment Booking → Activity Logs** every administrative action is recorded with IP address, user agent, initiator role, and a field-level diff (old value vs. new, side by side). Logs also capture the exact rendered HTML of any email sent, and email delivery failures (SMTP errors, bad credentials, etc.) are logged too, so nothing fails silently. A raw JSON view is available for deeper technical auditing.
+
+### 📧 Email Logs & Delivery Tracking
+Every outbound email admin notifications, patient confirmations is logged with delivery status and a rendered preview. The plugin hooks into `wp_mail_failed`, so SMTP problems surface as an actionable log entry instead of a booking that quietly never got confirmed.
+
+### 📊 Hardened CSV Export
+One-click appointment exports with UTF-8 BOM encoding (so accented characters like `ä`, `é`, `ñ` render correctly in Excel) and protection against CSV formula injection.
+
+### 🩺 Doctor Scheduling
+Weekly working hours, break windows, configurable slot intervals, and holiday overrides (single date, date range, or recurring) all enforced live against the booking calendar.
+
 ---
 
-## 🎨 Page Builder Compatibility (Divi & Elementor)
+## 🔒 Security & Hardening
 
-- **Zero External Dependencies**: The `[appointment_booking]` shortcode works natively inside Divi Text, Code, or Shortcode modules, Elementor Shortcode widgets, Gutenberg, and classic editor.
-- **Clean Styling**: Embedded CSS ensures smooth responsive layouts across desktop, tablet, and mobile.
+> [!IMPORTANT]
+> Built with the assumption that this handles real patient data. Treat every input as hostile until proven otherwise.
 
----
-
-## 🔒 Security & Data Integrity
-
-- **Nonces & Capabilities**: Nonces protect all form submissions; `manage_options` capability is enforced on all admin endpoints.
-- **Prepared Queries**: All database operations execute via `$wpdb->prepare()`.
-- **Sanitization & Escaping**: Full input sanitization (`sanitize_text_field`, `sanitize_email`, `absint`) and output escaping (`esc_html`, `esc_attr`, `esc_url`).
-- **Anti-Spam & Collision Prevention**: Public form features honeypot protection and real-time slot availability re-verification at submission time.
+- **Nonces & capability checks** on every admin and AJAX request; destructive actions require `manage_options`.
+- **`$wpdb->prepare()`** for all database queries no raw SQL interpolation.
+- **Sanitization on input, escaping on output**, throughout.
+- **Anti-formula CSV export (CWE-1236)** neutralizes leading `=`, `+`, `-`, `@`, tab, and carriage-return characters so a malicious cell can't execute code when opened in Excel.
+- **Transient IP rate limiting** caps booking submissions at 5 per IP per 5 minutes to blunt automated bot flooding.
+- **Honeypot field** on the public booking form for baseline spam prevention.
+- **Server-side slot re-validation at submission time** the source of truth is the database, not the browser, so two patients can never claim the same slot.
+- **Input length bounds** enforced server-side (`first_name`: 50, `last_name`: 50, `email`: 100, `phone`: 30, `message`: 1000).
+- **Dedicated `class-security.php` and `class-validator.php`** modules centralize input handling rather than scattering ad hoc checks across controllers.
 
 ---
 
 ## 🗄️ Database Architecture
 
-The plugin automatically installs and maintains 10 custom database tables:
+The plugin installs and maintains its schema via `dbDelta()` on activation:
 
-- `wp_ab_categories`: Treatment categories and display order.
-- `wp_ab_doctors`: Doctor profiles, qualifications, experience, bio, email, status.
-- `wp_ab_doctor_categories`: Pivot table mapping doctors to multiple categories.
-- `wp_ab_services`: Services, duration (hours/minutes), and category links.
-- `wp_ab_availability`: Doctor weekly working hours, breaks, and slot durations.
-- `wp_ab_holidays`: Doctor holidays, ranges, recurring days, and special working days.
-- `wp_ab_appointments`: Master appointment bookings, status, and patient data.
-- `wp_ab_appointment_services`: Pivot table linking appointments to selected services.
-- `wp_ab_translation_map`: WPML translation mapping for custom table items.
-- `wp_ab_activity_logs`: Complete system audit trail with diffs, user metadata, IP, and user agents.
+| Table | Purpose |
+| :--- | :--- |
+| `wp_ab_categories` | Treatment categories and display order |
+| `wp_ab_doctors` | Doctor profiles — qualifications, experience, email, bio |
+| `wp_ab_doctor_categories` | Pivot: doctors ↔ categories (many-to-many) |
+| `wp_ab_services` | Services, duration, category links |
+| `wp_ab_availability` | Weekly working hours, breaks, slot duration per doctor |
+| `wp_ab_holidays` | Single/range holidays, recurring days off, special working days |
+| `wp_ab_appointments` | Master appointment records — status, patient data |
+| `wp_ab_appointment_services` | Pivot: appointments ↔ selected services |
+| `wp_ab_translation_map` | WPML translation mapping for custom table content |
+| `wp_ab_activity_logs` | Audit trail — diffs, actor metadata, IP, user agent, email body |
 
----
-
-## 🗑️ Uninstall & Data Retention
-
-By default, all custom database tables and plugin options are removed upon deletion. To preserve data upon plugin deletion, enable **"Keep all appointment data when the plugin is deleted"** under **Appointment Booking → Settings → Advanced**.
+**Uninstall:** by default, deleting the plugin drops all of the tables above. Turn on **Settings → Advanced → "Keep all appointment data when the plugin is deleted"** to preserve everything instead.
 
 ---
 
-## 🔮 Future Roadmap
+## 🏗️ Architecture Overview
 
-- 🗓️ **Google Calendar & Outlook 365 Sync**: 2-way real-time calendar synchronization for doctors.
-- 📹 **Telehealth Integration**: Automated Zoom & Google Meet video link generation for online consultations.
-- 💬 **WhatsApp & SMS Notifications**: Twilio and WhatsApp Business API reminders for upcoming appointments.
-- 💳 **Payment Gateways**: Stripe, PayPal, Razorpay, and WooCommerce checkout integration.
-- 👤 **Patient Portal**: Self-service appointment management, rescheduling, and medical history.
-- 🧩 **Native Builders**: Dedicated Elementor widgets and Divi modules.
+The codebase follows a clear separation of concerns rather than one monolithic file:
+
+```
+appointment-booking-system/
+├── admin/
+│   ├── controllers/        # One controller per admin screen (doctors, services, activity logs...)
+│   ├── views/partials/     # Renderable admin templates
+│   └── class-admin.php
+├── frontend/
+│   ├── ajax/                # AJAX endpoint handlers
+│   ├── shortcodes/           # [appointment_booking]
+│   ├── views/                 # Public-facing booking form
+│   └── class-frontend.php
+├── includes/
+│   ├── database/            # class-db-installer.php — schema creation
+│   ├── email/                # class-email.php — dispatch + logging
+│   ├── language/            # WPML adapter, translation service, i18n strings
+│   ├── models/                # One model per entity (Doctor, Service, Appointment, Holiday...)
+│   ├── security/             # class-security.php
+│   ├── validation/           # class-validator.php
+│   ├── class-logger.php
+│   └── functions.php
+├── assets/
+│   ├── css/                  # admin.css, frontend.css
+│   └── js/                   # admin.js, frontend.js
+├── appointment-booking-system.php   # Bootstrap + PSR-4-ish autoloader
+├── uninstall.php
+└── readme.md
+```
+
+Classes are autoloaded from the `AB\` namespace, so `AB\Admin\Controllers\Doctor_Controller` maps directly to `admin/controllers/class-doctor-controller.php` no manual `require` list to maintain as the plugin grows.
+
+---
+
+## 💻 Page Builder Compatibility
+
+Drop the shortcode into any page, post, or builder's code/text module:
+
+```
+[appointment_booking]
+```
+
+> [!TIP]
+> Works with **Gutenberg**, **Divi Builder**, **Elementor**, **Beaver Builder**, and **WPBakery** the shortcode has zero dependency on any specific builder.
+
+---
+
+## 🚀 Installation & Quick Start
+
+1. Upload the `appointment-booking-system` folder to `/wp-content/plugins/`.
+2. Activate via **Plugins → Installed Plugins**.
+3. Go to **Appointment Booking → Treatment Categories** and add your specialties.
+4. Add **Doctors** and assign them to categories.
+5. Add **Services** under each category.
+6. Configure each doctor's **Availability** working hours, breaks, slot interval, holidays.
+7. Drop `[appointment_booking]` onto your booking page. Done.
+
+**Requirements:** WordPress 6.0+, PHP 8.1+, MySQL/MariaDB.
+
+> [!NOTE]
+> Confirmation emails rely on WordPress's `wp_mail()` (or your configured SMTP plugin). Verify your SMTP credentials under **Appointment Booking → Settings** and check **Activity Logs** for any `Email Delivery Failed` entries after your first test booking.
+
+---
+
+## ❓ FAQ
+
+**Does this work with Elementor / Divi / other builders?**
+Yes, the `[appointment_booking]` shortcode has no builder dependency and drops into any text/code/shortcode module.
+
+**Can I run a bilingual or multilingual clinic site?**
+Yes, with WPML installed. The plugin's translation layer covers categories, services, doctor bios, and every static UI string via the String Translations screen.
+
+**What happens if two patients try to book the same slot at the same time?**
+The server re-validates slot availability at submission time against the database, not just the browser state, so the second submission is rejected with an "already booked" response.
+
+**Is patient data removed if I delete the plugin?**
+By default, yes all custom tables are dropped on uninstall. Enable **Settings → Advanced → "Keep all appointment data when the plugin is deleted"** if you need to preserve records first.
+
+**Where do I check if confirmation emails are actually sending?**
+**Appointment Booking → Activity Logs**, filtered to `EMAIL` every send attempt, success or failure, is recorded with the SMTP error message if one occurred.
+
+---
+
+## 🔮 Future Plans
+
+- 🗓️ Two-way Google Calendar & Outlook 365 sync
+- 📹 Telehealth links via Zoom / Google Meet auto-generation
+- 💬 WhatsApp & SMS reminders (Twilio / WhatsApp Business API)
+- 💳 Payments Stripe, PayPal, Razorpay, WooCommerce checkout
+- 👤 Patient portal self-service management and history
+- 🔁 Rescheduling & recurring appointments
+- 📈 Analytics dashboard
+- 🔌 REST API
+- 🧩 Native Elementor widget & Divi module
+
+---
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome. Please open an issue describing the bug or feature before submitting a PR so the approach can be discussed first.
+
+## 📄 License & Credits
+
+- **License:** GPL v2 or later
+- **Author:** Aashish Pathak
+- **Text Domain:** `appointment-booking-system`
+
+---
+
+<div align="center">
+
+If this saves your clinic or your client's hours of admin work, a ⭐ on the repo goes a long way.
+
+</div>

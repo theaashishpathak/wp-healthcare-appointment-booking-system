@@ -26,6 +26,10 @@ class String_Translation_Controller {
 			wp_die( esc_html__( 'Security check failed.', 'appointment-booking-system' ) );
 		}
 
+		if ( ! Translation_Service::is_wpml_active() ) {
+			wp_die( esc_html__( 'WPML / Multilingual functionality is not active on this site.', 'appointment-booking-system' ) );
+		}
+
 		if ( ! current_user_can( Security::ADMIN_CAP ) ) {
 			wp_die( esc_html__( 'You do not have permission to manage translations.', 'appointment-booking-system' ) );
 		}
@@ -129,6 +133,10 @@ class String_Translation_Controller {
 	public function clear_logs() {
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'ab_admin_nonce' ) ) {
 			wp_die( esc_html__( 'Security check failed.', 'appointment-booking-system' ) );
+		}
+
+		if ( ! Translation_Service::is_wpml_active() ) {
+			wp_die( esc_html__( 'WPML / Multilingual functionality is not active on this site.', 'appointment-booking-system' ) );
 		}
 
 		if ( ! current_user_can( Security::ADMIN_CAP ) ) {

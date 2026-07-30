@@ -462,7 +462,7 @@ $audit_logs = get_option( 'ab_i18n_audit_log', array() );
 				Editing Translations for <strong><?php echo esc_html( strtoupper( $active_lang ) ); ?></strong>
 			</div>
 			<button type="submit" class="button button-primary button-large" style="height:38px; line-height:36px; padding:0 24px; border-radius:6px; font-weight:700;">
-				<span class="dashicons dashicons-saved" style="vertical-align:text-top; margin-right:4px;"></span>
+				<span class="dashicons dashicons-saved" style="margin-right:4px;"></span>
 				<?php echo esc_html( sprintf( __( 'Save Translations for [%s]', 'appointment-booking-system' ), strtoupper( $active_lang ) ) ); ?>
 			</button>
 		</div>

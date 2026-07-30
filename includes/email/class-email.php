@@ -136,6 +136,7 @@ class Email {
 				'subject'         => $subject,
 				'delivery_status' => $sent ? 'Sent Successfully' : 'Failed / Mailer Rejected',
 				'language'        => $lang,
+				'email_body'      => $html,
 			)
 		);
 	}
@@ -183,6 +184,7 @@ class Email {
 				'subject'         => $subject,
 				'delivery_status' => $sent ? 'Sent Successfully' : 'Failed / Mailer Rejected',
 				'language'        => $lang,
+				'email_body'      => $html,
 			)
 		);
 	}

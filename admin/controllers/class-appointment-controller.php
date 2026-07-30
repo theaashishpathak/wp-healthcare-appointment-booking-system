@@ -51,34 +51,68 @@ class Appointment_Controller {
 		$model  = new Appointment_Model();
 		$result = $model->search( array( 'per_page' => 100000, 'page' => 1 ) );
 
+		\AB\Includes\Logger::log(
+			'appointment',
+			'exported',
+			'Exported ' . count( $result['items'] ) . ' appointment record(s) to CSV',
+			array(
+				'rows_exported' => count( $result['items'] ),
+				'filename'      => 'appointments-export-' . gmdate( 'Y-m-d' ) . '.csv',
+			)
+		);
+
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=appointments-export-' . gmdate( 'Y-m-d' ) . '.csv' );
 
 		$out = fopen( 'php://output', 'w' );
+
+		// Output UTF-8 Byte Order Mark (BOM) so Excel opens UTF-8 special characters (like Läng) correctly.
+		fprintf( $out, "\xEF\xBB\xBF" );
+
 		fputcsv(
 			$out,
 			array( 'Booking ID', 'Patient Name', 'Phone', 'Email', 'Doctor ID', 'Category ID', 'Date', 'Time', 'Status', 'Created At' )
 		);
 		foreach ( $result['items'] as $row ) {
+			// Format phone, date, and created_at as text so Excel displays full text instead of scientific notation or date column width hashes (###)
+			$phone      = ! empty( $row['phone'] ) ? "\t" . $row['phone'] : '';
+			$date       = ! empty( $row['appointment_date'] ) ? "\t" . $row['appointment_date'] : '';
+			$time       = ! empty( $row['appointment_time'] ) ? "\t" . $row['appointment_time'] : '';
+			$created_at = ! empty( $row['created_at'] ) ? "\t" . $row['created_at'] : '';
+
 			fputcsv(
 				$out,
 				array(
-					$row['booking_id'],
-					$row['patient_name'],
-					$row['phone'],
-					$row['email'],
-					$row['doctor_id'],
-					$row['category_id'],
-					$row['appointment_date'],
-					$row['appointment_time'],
-					$row['status'],
-					$row['created_at'],
+					$this->sanitize_csv_field( $row['booking_id'] ),
+					$this->sanitize_csv_field( $row['patient_name'] ),
+					$phone,
+					$this->sanitize_csv_field( $row['email'] ),
+					(int) $row['doctor_id'],
+					(int) $row['category_id'],
+					$date,
+					$time,
+					$this->sanitize_csv_field( $row['status'] ),
+					$created_at,
 				)
 			);
 		}
 		fclose( $out );
 		exit;
+	}
+
+	/**
+	 * Neutralize dangerous formula prefixes (=, +, -, @, \t, \r) for CSV export safety (CWE-1236).
+	 *
+	 * @param mixed $value Raw cell value.
+	 * @return string Safe cell value.
+	 */
+	protected function sanitize_csv_field( $value ) {
+		$str = (string) $value;
+		if ( '' !== $str && in_array( substr( $str, 0, 1 ), array( '=', '+', '-', '@', "\t", "\r" ), true ) ) {
+			return "'" . $str;
+		}
+		return $str;
 	}
 
 	protected function redirect_with_message( $type, $message ) {

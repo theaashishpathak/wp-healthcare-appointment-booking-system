@@ -57,10 +57,12 @@ class Admin {
 		add_submenu_page( 'ab-dashboard', __( 'Availability', 'appointment-booking-system' ), __( 'Availability', 'appointment-booking-system' ), $cap, 'ab-availability', array( $this, 'render_availability' ) );
 		add_submenu_page( 'ab-dashboard', __( 'Appointments', 'appointment-booking-system' ), __( 'Appointments', 'appointment-booking-system' ), $cap, 'ab-appointments', array( $this, 'render_appointments' ) );
 		add_submenu_page( 'ab-dashboard', __( 'Settings', 'appointment-booking-system' ), __( 'Settings', 'appointment-booking-system' ), $cap, 'ab-settings', array( $this, 'render_settings' ) );
-		add_submenu_page( 'ab-dashboard', __( 'String Translations', 'appointment-booking-system' ), __( 'String Translations', 'appointment-booking-system' ), $cap, 'ab-string-translations', array( $this, 'render_string_translations' ) );
+		if ( \AB\Includes\Language\Translation_Service::is_wpml_active() ) {
+			add_submenu_page( 'ab-dashboard', __( 'String Translations', 'appointment-booking-system' ), __( 'String Translations', 'appointment-booking-system' ), $cap, 'ab-string-translations', array( $this, 'render_string_translations' ) );
+			add_submenu_page( null, __( 'Manage Translation', 'appointment-booking-system' ), __( 'Manage Translation', 'appointment-booking-system' ), $cap, 'ab-translation', array( $this, 'render_translation' ) );
+		}
 		add_submenu_page( 'ab-dashboard', __( 'Activity Logs', 'appointment-booking-system' ), __( 'Activity Logs', 'appointment-booking-system' ), $cap, 'ab-activity-logs', array( $this, 'render_activity_logs' ) );
 		add_submenu_page( 'ab-dashboard', __( 'Help', 'appointment-booking-system' ), __( 'Help', 'appointment-booking-system' ), $cap, 'ab-help', array( $this, 'render_help' ) );
-		add_submenu_page( null, __( 'Manage Translation', 'appointment-booking-system' ), __( 'Manage Translation', 'appointment-booking-system' ), $cap, 'ab-translation', array( $this, 'render_translation' ) );
 	}
 
 	public function enqueue_assets( $hook ) {
@@ -137,9 +139,15 @@ class Admin {
 		$this->view( 'help' );
 	}
 	public function render_translation() {
+		if ( ! \AB\Includes\Language\Translation_Service::is_wpml_active() ) {
+			wp_die( esc_html__( 'WPML / Multilingual functionality is not active on this site.', 'appointment-booking-system' ) );
+		}
 		$this->view( 'translation' );
 	}
 	public function render_string_translations() {
+		if ( ! \AB\Includes\Language\Translation_Service::is_wpml_active() ) {
+			wp_die( esc_html__( 'WPML / Multilingual functionality is not active on this site.', 'appointment-booking-system' ) );
+		}
 		$this->view( 'string-translations' );
 	}
 	public function render_activity_logs() {

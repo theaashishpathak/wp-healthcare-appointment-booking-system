@@ -67,6 +67,20 @@ class Validator {
 	}
 
 	/**
+	 * @param string $field
+	 * @param string $value
+	 * @param int    $max
+	 * @param string $message
+	 * @return $this
+	 */
+	public function max_length( $field, $value, $max, $message ) {
+		if ( ! empty( $value ) && mb_strlen( (string) $value ) > $max ) {
+			$this->errors[ $field ] = $message;
+		}
+		return $this;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function passes() {

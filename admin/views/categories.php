@@ -81,7 +81,9 @@ if ( $edit_id ) {
 						<th><?php echo esc_html( $t( 'srv_field_slug', __( 'Slug', 'appointment-booking-system' ) ) ); ?></th>
 						<th><?php echo esc_html( $t( 'col_order', __( 'Order', 'appointment-booking-system' ) ) ); ?></th>
 						<th><?php echo esc_html( $t( 'col_status', __( 'Status', 'appointment-booking-system' ) ) ); ?></th>
-						<th><?php echo esc_html( $t( 'col_translations', __( 'Translations', 'appointment-booking-system' ) ) ); ?></th>
+						<?php if ( Translation_Service::is_wpml_active() ) : ?>
+							<th><?php echo esc_html( $t( 'col_translations', __( 'Translations', 'appointment-booking-system' ) ) ); ?></th>
+						<?php endif; ?>
 						<th><?php echo esc_html( $t( 'col_actions', __( 'Actions', 'appointment-booking-system' ) ) ); ?></th>
 					</tr>
 				</thead>
@@ -93,14 +95,16 @@ if ( $edit_id ) {
 							<td><?php echo esc_html( $cat['slug'] ); ?></td>
 							<td><?php echo esc_html( $cat['display_order'] ); ?></td>
 							<td><?php echo $cat['status'] ? '<span class="ab-badge ab-badge-confirmed">' . esc_html( $t( 'status_active', __( 'Active', 'appointment-booking-system' ) ) ) . '</span>' : '<span class="ab-badge ab-badge-cancelled">' . esc_html( $t( 'status_inactive', __( 'Inactive', 'appointment-booking-system' ) ) ) . '</span>'; ?></td>
-							<td>
-								<?php
-								echo Translation_Service::render_translation_column(
-									Translation_Service::TYPE_CATEGORY,
-									$cat['id']
-								);
-								?>
-							</td>
+							<?php if ( Translation_Service::is_wpml_active() ) : ?>
+								<td>
+									<?php
+									echo Translation_Service::render_translation_column(
+										Translation_Service::TYPE_CATEGORY,
+										$cat['id']
+									);
+									?>
+								</td>
+							<?php endif; ?>
 							<td>
 								<a href="<?php echo esc_url( admin_url( 'admin.php?page=ab-categories&edit=' . $cat['id'] ) ); ?>"><?php echo esc_html( $t( 'btn_edit', __( 'Edit', 'appointment-booking-system' ) ) ); ?></a> |
 								<a class="ab-delete-link" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ab_delete_category&id=' . $cat['id'] ), 'ab_admin_nonce' ) ); ?>"><?php echo esc_html( $t( 'btn_delete', __( 'Delete', 'appointment-booking-system' ) ) ); ?></a>

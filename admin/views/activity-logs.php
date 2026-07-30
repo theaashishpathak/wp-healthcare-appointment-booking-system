@@ -170,7 +170,7 @@ $types = array(
 
 			<?php if ( ! empty( $logs ) ) : ?>
 				<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ab_clear_activity_logs' ), 'ab_admin_nonce' ) ); ?>" class="button button-link-delete" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to clear ALL activity logs? This action cannot be undone.', 'appointment-booking-system' ); ?>');">
-					<span class="dashicons dashicons-trash" style="vertical-align:text-top; margin-right:3px;"></span>
+					<span class="dashicons dashicons-trash" style="margin-right:3px;"></span>
 					<?php echo esc_html( $t( 'log_clear_btn', __( 'Clear All Logs', 'appointment-booking-system' ) ) ); ?>
 				</a>
 			<?php endif; ?>
@@ -266,7 +266,7 @@ $types = array(
 							</td>
 							<td style="text-align:right;">
 								<button type="button" class="button button-secondary button-small" onclick="abToggleLogDrawer(<?php echo esc_attr( $log['id'] ); ?>)" style="border-radius:6px;">
-									<span class="dashicons dashicons-visibility" style="vertical-align:text-top; font-size:13px; width:13px; height:13px; margin-right:2px;"></span>
+									<!-- <span class="dashicons dashicons-visibility" style="font-size:13px; width:13px; height:13px; margin-right:2px;"></span> -->
 									<?php echo esc_html( $t( 'log_view_details', __( 'View Details', 'appointment-booking-system' ) ) ); ?>
 								</button>
 							</td>

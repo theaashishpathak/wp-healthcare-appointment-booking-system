@@ -300,6 +300,11 @@ class Frontend_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Submission blocked.', 'appointment-booking-system' ) ) );
 		}
 
+		// IP Rate Limiting (max 5 booking submissions per IP per 5 minutes)
+		if ( ! Security::check_rate_limit( 'submit_booking', 5, 300 ) ) {
+			wp_send_json_error( array( 'message' => __( 'Too many booking attempts. Please wait a few minutes and try again.', 'appointment-booking-system' ) ), 429 );
+		}
+
 		$category_id  = isset( $_POST['category_id'] ) ? absint( $_POST['category_id'] ) : 0;
 		$doctor_id    = isset( $_POST['doctor_id'] ) ? absint( $_POST['doctor_id'] ) : 0;
 		$service_ids  = isset( $_POST['service_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['service_ids'] ) ) : array();
@@ -327,11 +332,16 @@ class Frontend_Ajax {
 			->required( 'date', $date, __( 'Appointment date is required.', 'appointment-booking-system' ) )
 			->required( 'time', $time, __( 'Appointment time is required.', 'appointment-booking-system' ) )
 			->required( 'first_name', $first_name, __( 'First name is required.', 'appointment-booking-system' ) )
+			->max_length( 'first_name', $first_name, 50, __( 'First name cannot exceed 50 characters.', 'appointment-booking-system' ) )
 			->required( 'last_name', $last_name, __( 'Last name is required.', 'appointment-booking-system' ) )
+			->max_length( 'last_name', $last_name, 50, __( 'Last name cannot exceed 50 characters.', 'appointment-booking-system' ) )
 			->required( 'email', $email, __( 'Email is required.', 'appointment-booking-system' ) )
 			->email( 'email', $email, __( 'Please enter a valid email address.', 'appointment-booking-system' ) )
+			->max_length( 'email', $email, 100, __( 'Email address is too long.', 'appointment-booking-system' ) )
 			->required( 'phone', $phone, __( 'Phone is required.', 'appointment-booking-system' ) )
 			->phone( 'phone', $phone, __( 'Please enter a valid phone number.', 'appointment-booking-system' ) )
+			->max_length( 'phone', $phone, 30, __( 'Phone number is too long.', 'appointment-booking-system' ) )
+			->max_length( 'message', $message, 1000, __( 'Message cannot exceed 1000 characters.', 'appointment-booking-system' ) )
 			->not_past_date( 'date', $date, __( 'Appointment date cannot be in the past.', 'appointment-booking-system' ) );
 
 		if ( empty( $service_ids ) ) {
