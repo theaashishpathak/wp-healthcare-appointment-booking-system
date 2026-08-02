@@ -34,8 +34,8 @@ $t = function ( $key, $default ) use ( $_lang_map ) {
 	<div class="ab-steps-indicator" aria-hidden="true">
 		<?php
 		$labels = array(
-			$t( 'label_category', __( 'Category', 'appointment-booking-system' ) ),
 			$t( 'label_doctor',   __( 'Doctor', 'appointment-booking-system' ) ),
+			$t( 'label_category', __( 'Category', 'appointment-booking-system' ) ),
 			$t( 'label_services', __( 'Services', 'appointment-booking-system' ) ),
 			$t( 'label_date',     __( 'Date', 'appointment-booking-system' ) ),
 			$t( 'label_time',     __( 'Time', 'appointment-booking-system' ) ),
@@ -59,8 +59,35 @@ $t = function ( $key, $default ) use ( $_lang_map ) {
 		<!-- honeypot spam field, must stay empty -->
 		<div class="ab-honeypot" aria-hidden="true"><input type="text" name="ab_website" tabindex="-1" autocomplete="off" /></div>
 
-		<!-- Step 1: Treatment Category -->
+		<!-- Step 1: Doctor -->
 		<section class="ab-step" data-step="1">
+			<h3><?php echo esc_html( $t( 'step_doctor', __( 'Choose Doctor', 'appointment-booking-system' ) ) ); ?></h3>
+			<div class="ab-grid ab-doctor-grid">
+				<?php foreach ( $doctors as $doc ) : ?>
+					<button type="button" class="ab-card ab-doctor-card" data-id="<?php echo esc_attr( $doc['id'] ); ?>" data-name="<?php echo esc_attr( $doc['name'] ); ?>">
+						<?php if ( ! empty( $doc['image'] ) ) : ?>
+							<img src="<?php echo esc_url( $doc['image'] ); ?>" alt="" class="ab-doctor-photo" />
+						<?php else : ?>
+							<div class="ab-doctor-photo"></div>
+						<?php endif; ?>
+						<span class="ab-doctor-name"><?php echo esc_html( $doc['name'] ); ?></span>
+						<?php if ( ! empty( $doc['qualification'] ) ) : ?>
+							<span class="ab-doctor-meta"><?php echo esc_html( $doc['qualification'] ); ?></span>
+						<?php endif; ?>
+						<?php if ( ! empty( $doc['experience'] ) ) : ?>
+							<span class="ab-doctor-meta"><?php echo esc_html( $doc['experience'] ); ?></span>
+						<?php endif; ?>
+						<?php if ( ! empty( $doc['specialization'] ) ) : ?>
+							<span class="ab-doctor-meta"><?php echo esc_html( $doc['specialization'] ); ?></span>
+						<?php endif; ?>
+						<span class="ab-doctor-select-btn"><?php esc_html_e( 'Select', 'appointment-booking-system' ); ?></span>
+					</button>
+				<?php endforeach; ?>
+			</div>
+		</section>
+
+		<!-- Step 2: Treatment Category -->
+		<section class="ab-step" data-step="2" style="display:none;">
 			<h3><?php echo esc_html( $t( 'step_category', __( 'Select Treatment Category', 'appointment-booking-system' ) ) ); ?></h3>
 			<div class="ab-grid ab-category-grid">
 				<?php foreach ( $categories as $cat ) : ?>
@@ -75,17 +102,15 @@ $t = function ( $key, $default ) use ( $_lang_map ) {
 					</button>
 				<?php endforeach; ?>
 			</div>
-		</section>
-
-		<!-- Step 2: Doctor -->
-		<section class="ab-step" data-step="2" style="display:none;">
-			<h3><?php echo esc_html( $t( 'step_doctor', __( 'Choose Doctor', 'appointment-booking-system' ) ) ); ?></h3>
-			<div class="ab-grid ab-doctor-grid" data-loading-text="<?php esc_attr_e( 'Loading doctors…', 'appointment-booking-system' ); ?>"></div>
 			<div class="ab-step-nav">
 				<button type="button" class="ab-btn ab-btn-back" data-back="1"><?php echo esc_html( $t( 'btn_back', __( 'Back', 'appointment-booking-system' ) ) ); ?></button>
 			</div>
 		</section>
 
+
+
+
+		
 		<!-- Step 3: Services -->
 		<section class="ab-step" data-step="3" style="display:none;">
 			<h3><?php echo esc_html( $t( 'step_services', __( 'Choose Services', 'appointment-booking-system' ) ) ); ?></h3>

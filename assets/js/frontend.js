@@ -91,59 +91,54 @@
 			} );
 		} );
 
-		/* ---------- Step 1: Category ---------- */
+		/* ---------- Step 1: Doctor ---------- */
 
-		root.querySelectorAll( '.ab-category-card' ).forEach( function ( card ) {
-			card.addEventListener( 'click', function () {
-				root.querySelectorAll( '.ab-category-card' ).forEach( function ( c ) { c.classList.remove( 'ab-selected' ); } );
-				card.classList.add( 'ab-selected' );
-				state.category = { id: card.getAttribute( 'data-id' ), name: card.getAttribute( 'data-name' ) };
-				state.doctor = null;
+		root.addEventListener( 'click', function ( e ) {
+			var docCard = e.target.closest( '.ab-doctor-card' );
+			if ( docCard && root.contains( docCard ) ) {
+				root.querySelectorAll( '.ab-doctor-card' ).forEach( function ( c ) { c.classList.remove( 'ab-selected' ); } );
+				docCard.classList.add( 'ab-selected' );
+				var docName = docCard.querySelector( '.ab-doctor-name' ) ? docCard.querySelector( '.ab-doctor-name' ).textContent.trim() : '';
+				state.doctor = { id: docCard.getAttribute( 'data-id' ), name: docName };
+				state.category = null;
 				state.services = [];
 				goToStep( 2 );
-				loadDoctors();
-			} );
+				loadCategories();
+			}
 		} );
 
-		/* ---------- Step 2: Doctor ---------- */
+		/* ---------- Step 2: Category ---------- */
 
-		function loadDoctors() {
-			var container = root.querySelector( '.ab-doctor-grid' );
+		function loadCategories() {
+			var container = root.querySelector( '.ab-category-grid' );
+			if ( ! container || ! state.doctor ) { return; }
 			setLoading( container );
 
-			ajax( 'ab_get_doctors', { category_id: state.category.id } ).then( function ( res ) {
+			ajax( 'ab_get_categories', { doctor_id: state.doctor.id } ).then( function ( res ) {
 				if ( ! res.success ) {
 					container.innerHTML = '<div class="ab-notice">' + escapeHtml( res.data && res.data.message ) + '</div>';
 					return;
 				}
-				var doctors = res.data.doctors;
-				if ( ! doctors.length ) {
-					container.innerHTML = '<div class="ab-notice">' + escapeHtml( 'No doctors available under this category yet.' ) + '</div>';
+				var categories = res.data.categories;
+				if ( ! categories.length ) {
+					container.innerHTML = '<div class="ab-notice">No treatment categories available for this doctor yet.</div>';
 					return;
 				}
 
 				container.innerHTML = '';
-				doctors.forEach( function ( doc ) {
+				categories.forEach( function ( cat ) {
 					var card = document.createElement( 'button' );
 					card.type = 'button';
-					card.className = 'ab-card ab-doctor-card';
-					card.setAttribute( 'data-id', doc.id );
-					card.innerHTML =
-						( doc.image ? '<img class="ab-doctor-photo" src="' + escapeHtml( doc.image ) + '" alt="" />' : '<div class="ab-doctor-photo"></div>' ) +
-						'<span class="ab-doctor-name">' + escapeHtml( doc.name ) + '</span>' +
-						( doc.qualification ? '<span class="ab-doctor-meta">' + escapeHtml( doc.qualification ) + '</span>' : '' ) +
-						( doc.experience ? '<span class="ab-doctor-meta">' + escapeHtml( doc.experience ) + '</span>' : '' ) +
-						( doc.specialization ? '<span class="ab-doctor-meta">' + escapeHtml( doc.specialization ) + '</span>' : '' ) +
-						'<span class="ab-doctor-select-btn">Select</span>';
-
-					card.addEventListener( 'click', function () {
-						container.querySelectorAll( '.ab-doctor-card' ).forEach( function ( c ) { c.classList.remove( 'ab-selected' ); } );
+					card.className = 'ab-card ab-category-card';
+					if ( state.category && String( state.category.id ) === String( cat.id ) ) {
 						card.classList.add( 'ab-selected' );
-						state.doctor = doc;
-						state.services = [];
-						goToStep( 3 );
-						loadServices();
-					} );
+					}
+					card.setAttribute( 'data-id', cat.id );
+					card.setAttribute( 'data-name', cat.name );
+					card.innerHTML =
+						( cat.icon ? '<img src="' + escapeHtml( cat.icon ) + '" alt="" class="ab-card-icon" />' : '' ) +
+						'<span class="ab-card-title">' + escapeHtml( cat.name ) + '</span>' +
+						( cat.description ? '<span class="ab-card-desc">' + escapeHtml( cat.description ) + '</span>' : '' );
 
 					container.appendChild( card );
 				} );
@@ -151,6 +146,21 @@
 				container.innerHTML = '<div class="ab-notice">' + escapeHtml( AB_FRONTEND.i18n.genericError ) + '</div>';
 			} );
 		}
+
+		root.addEventListener( 'click', function ( e ) {
+			var catCard = e.target.closest( '.ab-category-card' );
+			if ( catCard && root.contains( catCard ) ) {
+				root.querySelectorAll( '.ab-category-card' ).forEach( function ( c ) { c.classList.remove( 'ab-selected' ); } );
+				catCard.classList.add( 'ab-selected' );
+				state.category = { id: catCard.getAttribute( 'data-id' ), name: catCard.getAttribute( 'data-name' ) };
+				state.services = [];
+				goToStep( 3 );
+				loadServices();
+			}
+		} );
+
+
+
 
 		/* ---------- Step 3: Services ---------- */
 

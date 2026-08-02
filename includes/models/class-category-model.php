@@ -103,4 +103,50 @@ public function find( $id ) {
 				)";
 		return (int) $this->db->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
 	}
+
+	/**
+	 * Get categories assigned to a specific doctor.
+	 *
+	 * @param int  $doctor_id
+	 * @param bool $active_only
+	 * @return array
+	 */
+	public function get_categories_by_doctor( $doctor_id, $active_only = true ) {
+		$doctor_model = new Doctor_Model();
+		$category_ids = $doctor_model->get_category_ids( $doctor_id );
+
+		if ( empty( $category_ids ) ) {
+			return $this->all( $active_only );
+		}
+
+		$pivot = $this->db->prefix . 'ab_doctor_categories';
+		$sql   = $this->db->prepare(
+			"SELECT DISTINCT c.* FROM {$this->table()} c
+			 INNER JOIN {$pivot} dc ON dc.category_id = c.id
+			 WHERE dc.doctor_id = %d
+			 AND c.id NOT IN (
+				 SELECT translated_object_id FROM {$this->db->prefix}ab_translation_map
+				 WHERE object_type = 'category' AND translated_object_id != source_object_id
+			 )",
+			$doctor_id
+		);
+
+		if ( $active_only ) {
+			$sql .= ' AND c.status = 1';
+		}
+
+		$sql .= ' ORDER BY c.display_order ASC, c.name ASC';
+
+		$rows = $this->db->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
+
+		if ( empty( $rows ) ) {
+			return $this->all( $active_only );
+		}
+
+		return $this->translate_rows(
+			Translation_Service::TYPE_CATEGORY,
+			$rows
+		);
+	}
 }
+

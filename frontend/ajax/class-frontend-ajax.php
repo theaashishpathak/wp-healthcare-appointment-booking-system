@@ -37,6 +37,7 @@ class Frontend_Ajax {
 
 		$actions = array(
 			'ab_get_doctors'          => 'get_doctors',
+			'ab_get_categories'       => 'get_categories',
 			'ab_get_services'         => 'get_services',
 			'ab_get_available_dates'  => 'get_available_dates',
 			'ab_get_time_slots'       => 'get_time_slots',
@@ -61,8 +62,6 @@ class Frontend_Ajax {
 		}
 
 		// Resolve translated category ID back to the source ID.
-		// The visitor may have selected a translated category card (e.g. Spanish ID=5),
-		// but doctors are linked to the source category ID (e.g. English ID=2).
 		$category_id = Translation_Service::get_source_id( Translation_Service::TYPE_CATEGORY, $category_id );
 
 		$doctors = ( new Doctor_Model() )->all(
@@ -71,6 +70,7 @@ class Frontend_Ajax {
 				'active_only' => true,
 			)
 		);
+
 
 		$data = array_map(
 			function ( $doc ) {
@@ -88,6 +88,37 @@ class Frontend_Ajax {
 
 		wp_send_json_success( array( 'doctors' => $data ) );
 	}
+
+	/**
+	 * Step 2: treatment categories assigned to the selected doctor.
+	 */
+	public function get_categories() {
+		Security::verify_frontend_request();
+
+		$doctor_id = isset( $_POST['doctor_id'] ) ? absint( $_POST['doctor_id'] ) : 0;
+		if ( ! $doctor_id ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid doctor.', 'appointment-booking-system' ) ) );
+		}
+
+		$doctor_id = Translation_Service::get_source_id( Translation_Service::TYPE_DOCTOR, $doctor_id );
+
+		$categories = ( new Category_Model() )->get_categories_by_doctor( $doctor_id, true );
+
+		$data = array_map(
+			function ( $cat ) {
+				return array(
+					'id'          => (int) $cat['id'],
+					'name'        => $cat['name'],
+					'description' => ! empty( $cat['description'] ) ? wp_trim_words( $cat['description'], 12 ) : '',
+					'icon'        => ! empty( $cat['icon'] ) ? $cat['icon'] : '',
+				);
+			},
+			$categories
+		);
+
+		wp_send_json_success( array( 'categories' => $data ) );
+	}
+
 
 	/**
 	 * Step 3: services belonging to the selected category.

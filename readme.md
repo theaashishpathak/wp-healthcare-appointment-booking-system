@@ -27,11 +27,11 @@ Every step of the wizard is deliberately minimal, every submission is re-validat
 ## ✨ Core System Modules
 
 ### 🧭 8-Step AJAX Booking Wizard
-A responsive, no-reload booking journey that walks patients from specialty to confirmation:
+A responsive, no-reload booking journey that walks patients from doctor selection to confirmation:
 
 ```mermaid
 flowchart LR
-    A["1️⃣ Category<br/>Select Specialty"] --> B["2️⃣ Doctor<br/>Profile & Bio"]
+    A["1️⃣ Doctor<br/>Profile & Bio"] --> B["2️⃣ Category<br/>Select Specialty"]
     B --> C["3️⃣ Services<br/>Multi-Selection"]
     C --> D["4️⃣ Date<br/>Interactive Cal"]
     D --> E["5️⃣ Time<br/>Open Slots Only"]
@@ -42,14 +42,15 @@ flowchart LR
 
 | Step | Stage | What happens |
 | :---: | :--- | :--- |
-| **1** | **Category** | Patient picks a specialty — *Cardiology*, *Dental Care*, *Orthopedics*, or any category you define. |
-| **2** | **Doctor** | Browse assigned doctors with photo, qualifications, experience, and bio. |
+| **1** | **Doctor** | Patient picks an available doctor with photo, qualifications, experience, and bio. |
+| **2** | **Category** | Select a treatment category / specialty associated with the chosen doctor. |
 | **3** | **Services** | Select one or more services; total duration is calculated live. |
 | **4** | **Date** | An interactive calendar respects each doctor's working days, holidays, and recurring days off. |
 | **5** | **Time** | Slots are generated in real time, excluding breaks, past times, and anything already booked. |
 | **6** | **Patient Info** | Collects name, email, phone, country code, and message — with inline validation. |
 | **7** | **Review** | A summary card shows every selection before the patient commits. |
 | **8** | **Confirmation** | A unique Booking ID (`AB-YYYYMMDD-XXXX`) is issued and a confirmation email is dispatched instantly. |
+
 
 ### 🌐 WPML & Multilingual Support
 - Deep integration with WPML's language filters, so translated content and language switching work the way WordPress users expect.
